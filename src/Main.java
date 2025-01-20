@@ -7,7 +7,7 @@ import repositories.interfaces.IUserRepository;
 
 public class Main {
     public static void main(String[] args) {
-
+//Yeraly
         // We have to remake this one and others to our Bank project 'ZEBT'
         IDB db = new PostgresDB("jdbc:postgresql://localhost:5432", "Tair", "0000", "Tair2");
         IUserRepository repo = new UserRepository(db);
