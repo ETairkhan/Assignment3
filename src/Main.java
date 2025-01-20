@@ -5,6 +5,8 @@ import data.interfaceces.IDB;
 import repositories.UserRepository;
 import repositories.interfaces.IUserRepository;
 
+import java.util.ArrayList;
+
 public class Main {
     public static void main(String[] args) {
 //Yeraly
@@ -16,6 +18,9 @@ public class Main {
         app.start();
 
         db.close();
+
+        ArrayList list = new ArrayList();
+
     }
 }
 //hello
