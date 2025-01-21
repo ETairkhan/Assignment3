@@ -5,20 +5,22 @@ public class User {
     private String name;
     private String surname;
     private int age;
+    private boolean gender; // true = male, false = female
     private int creditcard;
     private int balance;
-    private int writeOffs; // CamelCase for better naming
+    private int writeOffs;
     private int deposit;
 
     // Default constructor
-    public User() {
+    public User(int id, String name, String surname, boolean gender) {
     }
 
     // Constructor with all fields
-    public User(String name, String surname, int age, int creditcard, int balance, int writeOffs, int deposit) {
+    public User(String name, String surname, int age, boolean gender, int creditcard, int balance, int writeOffs, int deposit) {
         this.name = name;
         this.surname = surname;
-        this.age = age;
+        this.age = validateAge(age);
+        this.gender = gender;
         this.creditcard = creditcard;
         this.balance = balance;
         this.writeOffs = writeOffs;
@@ -30,7 +32,15 @@ public class User {
         this.id = id;
         this.name = name;
         this.surname = surname;
-        this.age = age;
+        this.age = validateAge(age);
+    }
+
+    // Validation for age
+    private int validateAge(int age) {
+        if (age < 0 || age > 120) {
+            throw new IllegalArgumentException("Age must be between 0 and 120.");
+        }
+        return age;
     }
 
     // Getter and Setter methods
@@ -63,7 +73,15 @@ public class User {
     }
 
     public void setAge(int age) {
-        this.age = age;
+        this.age = validateAge(age);
+    }
+
+    public boolean getGender() {
+        return gender;
+    }
+
+    public void setGender(boolean gender) {
+        this.gender = gender;
     }
 
     public int getCreditcard() {
@@ -105,6 +123,7 @@ public class User {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", age=" + age +
+                ", gender=" + (gender ? "Male" : "Female") +
                 ", creditcard=" + creditcard +
                 ", balance=" + balance +
                 ", writeOffs=" + writeOffs +
