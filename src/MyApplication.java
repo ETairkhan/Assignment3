@@ -1,9 +1,10 @@
 import controllers.interfaces.IUserController;
 import repositories.interfaces.IUserRepository;
-
+//smth
 import java.util.InputMismatchException;
 import java.util.Scanner;
 //chototam
+//dadaya
 public class MyApplication {
     private final IUserController controller;
     private final Scanner scanner = new Scanner(System.in);
@@ -22,6 +23,14 @@ public class MyApplication {
         System.out.println("0. Exit");
         System.out.println();
         System.out.print("Select an option (1-3): ");
+        System.out.println("Usage:\n" +
+                "  validate <card_numbers>          - Validate one or more card numbers\n" +
+                "  validate --stdin                 - Validate card numbers via standard input\n" +
+                "  generate [--pick] <pattern>      - Generate card numbers using a pattern\n" +
+                "  information --brands=<file> --issuers=<file> <card_number>\n" +
+                "                                   - Retrieve brand and issuer information\n" +
+                "  issue --brands=<file> --issuers=<file> --brand=<brand> --issuer=<issuer>\n" +
+                "                                   - Issue a new card with specified brand and issuer");
     }
 
     public void start(){
@@ -52,6 +61,8 @@ public class MyApplication {
         String surname = scanner.next();
         System.out.println("Please enter gender (male/female): ");
         String gender = scanner.next();
+//        System.out.println("Please enter gender (male/fem ");
+//        String gender = scanner.next();
 
         String response = controller.createUser(name, surname, gender);
         System.out.println(response);
