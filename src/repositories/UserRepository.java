@@ -63,7 +63,7 @@ public class UserRepository implements IUserRepository {
         Connection connection = null;
         try{
             connection = db.getConnection();
-            String sql ="SELECT id, name, surname, gender FROM users";
+            String sql ="SELECT id, name, surname, gender,email,security_pin FROM users";
             Statement st = connection.createStatement();
 
             ResultSet rs = st.executeQuery(sql);

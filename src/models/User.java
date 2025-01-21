@@ -5,6 +5,8 @@ public class User {
     private String name;
     private String surname;
     private boolean gender;
+    private String email;
+    private int securityPin;
 
     public User(){
 
