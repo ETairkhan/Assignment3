@@ -11,7 +11,7 @@ public class MyApplication {
     public MyApplication(IUserController controller) {
         this.controller = controller;
     }
-
+//daday
     private void mainMenu(){
         System.out.println();
         System.out.println("Welcome to My Application");
@@ -69,4 +69,6 @@ public class MyApplication {
         String response = controller.getAllUsers();
         System.out.println(response);
     }
+
+//    yerosfhosanco
 }
