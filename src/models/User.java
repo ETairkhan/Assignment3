@@ -4,23 +4,36 @@ public class User {
     private int id;
     private String name;
     private String surname;
-    private boolean gender;
+    private int age;
+    private int creditcard;
+    private int balance;
+    private int writeOffs; // CamelCase for better naming
+    private int deposit;
 
-    public User(){
-
+    // Default constructor
+    public User() {
     }
 
-    public User(String name, String surname, boolean gender) {
-        setName(name);
-        setSurname(surname);
-        setGender(gender);
+    // Constructor with all fields
+    public User(String name, String surname, int age, int creditcard, int balance, int writeOffs, int deposit) {
+        this.name = name;
+        this.surname = surname;
+        this.age = age;
+        this.creditcard = creditcard;
+        this.balance = balance;
+        this.writeOffs = writeOffs;
+        this.deposit = deposit;
     }
 
-    public User(int id, String name, String surname, boolean gender) {
-        this(name, surname, gender);
-        setId(id);
+    // Constructor with ID and basic details
+    public User(int id, String name, String surname, int age) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.age = age;
     }
 
+    // Getter and Setter methods
     public int getId() {
         return id;
     }
@@ -45,12 +58,44 @@ public class User {
         this.surname = surname;
     }
 
-    public boolean getGender() {
-        return gender;
+    public int getAge() {
+        return age;
     }
 
-    public void setGender(boolean gender) {
-        this.gender = gender;
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public int getCreditcard() {
+        return creditcard;
+    }
+
+    public void setCreditcard(int creditcard) {
+        this.creditcard = creditcard;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
+
+    public int getWriteOffs() {
+        return writeOffs;
+    }
+
+    public void setWriteOffs(int writeOffs) {
+        this.writeOffs = writeOffs;
+    }
+
+    public int getDeposit() {
+        return deposit;
+    }
+
+    public void setDeposit(int deposit) {
+        this.deposit = deposit;
     }
 
     @Override
@@ -59,7 +104,11 @@ public class User {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", gender=" + gender +
+                ", age=" + age +
+                ", creditcard=" + creditcard +
+                ", balance=" + balance +
+                ", writeOffs=" + writeOffs +
+                ", deposit=" + deposit +
                 '}';
     }
 }
