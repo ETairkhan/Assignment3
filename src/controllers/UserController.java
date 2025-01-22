@@ -1,28 +1,38 @@
 package controllers;
 
-import controllers.interfaces.IUserRepository;
+import controllers.interfaces.IUserController;
 import models.User;
+import repositories.interfaces.IUserRepository;
+
 import java.util.List;
 
-public class UserController {
-    private final IUserRepository userRepository;
+public class UserController implements IUserController {
+    private final IUserRepository repo;
 
-    public UserController(IUserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(IUserRepository repo) {
+        this.repo = repo;
+    }
+    @Override
+    public String createUser(String name, String surname, String gender) {
+        boolean male = gender.equalsIgnoreCase("male");
+        User user = new User(name, surname, male);
+        boolean created = repo.createUser(user);
+        return (created) ? "User was created" : "User creation was failed";
     }
 
-    public String createUser(String name, String surname, int age, boolean gender, int creditCard, int balance, int writeOffs, int deposit) {
-        models.User user = new User(name, surname, age, gender, creditCard, balance, writeOffs, deposit);
-        boolean isCreated = userRepository.createUser(user);
-        return isCreated ? "User created successfully." : "Failed to create user.";
+    @Override
+    public String getUserById(int id) {
+        User user = repo.getUserById(id);
+        return (user == null) ? "User was not found" : user.toString();
     }
 
+    @Override
     public String getAllUsers() {
-        List<User> users = userRepository.getAllUsers();
-        StringBuilder response = new StringBuilder();
+        List<User> users = repo.getAllUsers();
+        StringBuilder responce = new StringBuilder();
         for (User user : users) {
-            response.append(user.toString()).append("\n");
+            responce.append(user.toString()).append("\n");
         }
-        return response.toString();
+        return responce.toString();
     }
 }

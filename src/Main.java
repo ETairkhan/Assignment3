@@ -1,22 +1,18 @@
 import controllers.UserController;
+import controllers.interfaces.IUserController;
 import data.PostgresDB;
+import data.interfaceces.IDB;
 import repositories.UserRepository;
-import controllers.interfaces.IUserRepository;
-
+import repositories.interfaces.IUserRepository;
 
 public class Main {
     public static void main(String[] args) {
-        data.interfaces.IDB db = new PostgresDB("jdbc:postgresql://localhost:5432/credit_card_system", "your_username", "your_password");
+        IDB db = new PostgresDB("jdbc:postgresql://localhost:5432", "Tair", "0000", "");
         IUserRepository repo = new UserRepository(db);
-        UserController controller = new UserController(repo);
+        IUserController controller = new UserController(repo);
+        MyApplication app = new MyApplication(controller);
+        app.start();
 
-        try {
-            System.out.println(controller.createUser("John", "Doe", 30, true, 123456789, 1000, 50, 200));
-            System.out.println(controller.getAllUsers());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            db.close();
-        }
+        db.close();
     }
 }
