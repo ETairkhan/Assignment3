@@ -17,8 +17,6 @@ public class Main {
 
         db.close();
 
-        ArrayList list = new ArrayList();
-
     }
 }
 
