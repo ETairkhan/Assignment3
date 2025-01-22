@@ -52,7 +52,7 @@ public class UserRepository implements IUserRepository {
                         rs.getString("name"),
                         rs.getString("surname"),
                         rs.getBoolean("gender"),
-                        rs.getString("creditCardNumber")); // Include creditCardNumber
+                        rs.getString("card")); // Include creditCardNumber
             }
         }catch (SQLException e){
             System.out.println("sql error:" + e.getMessage());
@@ -75,7 +75,7 @@ public class UserRepository implements IUserRepository {
                         rs.getString("name"),
                         rs.getString("surname"),
                         rs.getBoolean("gender"),
-                        rs.getString("creditCardNumber"));
+                        rs.getString("card"));
                 users.add(user);
             }
             return users;
