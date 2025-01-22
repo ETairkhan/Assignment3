@@ -16,7 +16,7 @@ public class Main {
         app.start();
 //akfdlkasj;fj
         db.close();
-//yeralyasfdsafvdv
+//yeralyasfdsafvdvm,/asfnas,mnflk;sdnfsla;knf
     }
 }
 
