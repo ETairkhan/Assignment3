@@ -8,8 +8,5 @@ public interface IUserRepository {
     boolean createUser(User user);
     User getUserById(int id);
     List<User> getAllUsers();
-
     boolean deleteUser(int id);
-
-    boolean isValidCreditCard(String card);
 }

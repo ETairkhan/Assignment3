@@ -4,27 +4,25 @@ import java.util.Map;
 
 public class Validator {
 
-    // Validate an array of credit card numbers
-    public static void validate(String[] numbers) {
-        if (numbers == null || numbers.length == 0 || numbers[0] == null || numbers[0].isEmpty()) {
+    public static boolean validate(String number) {
+        if (number == null || number.isEmpty()) {
             System.out.println("INCORRECT");
-            return;
+            return false;
         }
-        for (String num : numbers) {
-            if (num == null || num.isEmpty()) {
-                System.out.println("INCORRECT");
-                return;
-            }
-            num = num.replaceAll("\\s", ""); // Remove spaces
-            if (num.length() < 13 || num.length() > 19) {
-                System.out.println("INCORRECT");
-            } else if (isValidLuhn(num)) {
-                System.out.println("OK");
-            } else {
-                System.out.println("INCORRECT");
-            }
+
+        number = number.replaceAll("\\s", ""); // Remove spaces
+        if (number.length() < 13 || number.length() > 19) {
+            System.out.println("INCORRECT");
+            return false;
+        } else if (isValidLuhn(number)) {
+            System.out.println("OK");
+            return true;
+        } else {
+            System.out.println("INCORRECT");
+            return false;
         }
     }
+
 
     // Luhn algorithm for credit card validation
     public static boolean isValidLuhn(String card) {

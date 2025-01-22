@@ -1,6 +1,6 @@
 import controllers.interfaces.IUserController;
 import repositories.interfaces.IUserRepository;
-
+import validate.Validator;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -58,13 +58,14 @@ public class MyApplication {
         String gender = scanner.next();
         System.out.println("Please enter credit card number: ");
         String creditCardNumber = scanner.next();
+        if (!Validator.validate(creditCardNumber)) {
+            System.out.println("Invalid credit card number. User creation failed.");
+            return; // Exit if validation fails
+        }
         System.out.println("Please enter balance: "); // Prompt for balance
         double balance = scanner.nextDouble();
 
-        if (!controller.isValidCreditCard(creditCardNumber)) {
-            System.out.println("Invalid credit card number. Please try again.");
-            return; // Exit if the credit card is invalid
-        }
+
 
 
         String response = controller.createUser(name, surname, gender, creditCardNumber, balance);

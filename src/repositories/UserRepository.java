@@ -3,12 +3,13 @@ package repositories;
 import data.interfaceces.IDB;
 import models.User;
 import repositories.interfaces.IUserRepository;
+import validate.Validator;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public  class UserRepository implements IUserRepository {
+public class UserRepository implements IUserRepository {
     private final IDB db;
 
     public UserRepository(IDB db) {
@@ -17,7 +18,7 @@ public  class UserRepository implements IUserRepository {
 
     @Override
     public boolean createUser(User user) {
-        if (!isValidCreditCard(user.getCard())) { // Validate the credit card
+        if (!Validator.isValidLuhn(user.getCard())) { // Validate the credit card using Validator
             System.out.println("Invalid credit card number.");
             return false; // Return early if the card is invalid
         }
@@ -115,26 +116,5 @@ public  class UserRepository implements IUserRepository {
         return false;
     }
 
-    public boolean isValidCreditCard(String cardNumber) {
-        int sum = 0;
-        boolean alternate = false;
-
-        // Start from the rightmost digit and iterate left
-        for (int i = cardNumber.length() - 1; i >= 0; i--) {
-            int digit = Character.getNumericValue(cardNumber.charAt(i));
-
-            if (alternate) {
-                digit *= 2; // Double every second digit
-                if (digit > 9) {
-                    digit -= 9;
-                }
-            }
-
-            sum += digit; // Add the digit to the sum
-            alternate = !alternate; // Toggle the alternate flag
-        }
-
-        return sum % 10 == 0; // Valid if the sum is divisible by 10
-    }
 
 }
