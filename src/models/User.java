@@ -6,7 +6,6 @@ public class User {
     private String surname;
     private int age;
     private boolean gender; // true = male, false = female
-    private int creditcard;
     private int balance;
     private int writeOffs;
     private int deposit;
@@ -16,12 +15,11 @@ public class User {
     }
 
     // Constructor with all fields
-    public User(String name, String surname, int age, boolean gender, int creditcard, int balance, int writeOffs, int deposit) {
+    public User(String name, String surname, int age, boolean gender, int creditCard, int balance, int writeOffs, int deposit) {
         this.name = name;
         this.surname = surname;
         this.age = validateAge(age);
         this.gender = gender;
-        this.creditcard = creditcard;
         this.balance = balance;
         this.writeOffs = writeOffs;
         this.deposit = deposit;
@@ -124,7 +122,7 @@ public class User {
                 ", surname='" + surname + '\'' +
                 ", age=" + age +
                 ", gender=" + (gender ? "Male" : "Female") +
-                ", creditcard=" + creditcard +
+                ", creditcard=" + creditCard +
                 ", balance=" + balance +
                 ", writeOffs=" + writeOffs +
                 ", deposit=" + deposit +
