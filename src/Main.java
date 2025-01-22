@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 
 public class Main {
     public static void main(String[] args) {
+<<<<<<< HEAD
         String dbUrl = "jdbc:postgresql://localhost:5432/credit_card_system";
         String dbUser = "your_username";
         String dbPassword = "your_password";
@@ -20,6 +21,15 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
+=======
+        IDB db = new PostgresDB("jdbc:postgresql://localhost:5432", "Tair", "0000", "Tair2");
+        IUserRepository repo = new UserRepository(db);
+        IUserController controller = new UserController(repo);
+        MyApplication app = new MyApplication(controller);
+        app.start();
+
+        db.close();
+>>>>>>> 2de7b6fd8cd3867d99894cb29d1f28e1e3c44a93
     }
 }
 
