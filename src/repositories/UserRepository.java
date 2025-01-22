@@ -6,9 +6,10 @@ import repositories.interfaces.IUserRepository;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public  class UserRepository implements IUserRepository {
+public class UserRepository implements IUserRepository {
     private final IDB db;
 
     public UserRepository(IDB db) {
@@ -17,16 +18,14 @@ public  class UserRepository implements IUserRepository {
 
     @Override
     public boolean createUser(User user) {
-        if (!isValidCreditCard(user.getCard())) { // Validate the credit card
-            System.out.println("Invalid credit card number.");
-            return false; // Return early if the card is invalid
+        if (user == null || user.getCard() == null || !isValidCreditCard(user.getCard())) {
+            System.out.println("Invalid input or credit card number.");
+            return false;
         }
-
 
         String sql = "INSERT INTO users(name, surname, gender, card, balance) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = db.getConnection();
              PreparedStatement st = connection.prepareStatement(sql)) {
-
 
             st.setString(1, user.getName());
             st.setString(2, user.getSurname());
@@ -34,16 +33,13 @@ public  class UserRepository implements IUserRepository {
             st.setString(4, user.getCard());
             st.setDouble(5, user.getBalance());
 
-            int rowsAffected = st.executeUpdate();
-            return rowsAffected > 0;
+            return st.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.out.println("SQL error: " + e.getMessage());
+            System.err.println("Error while creating user: " + e.getMessage());
         }
         return false;
     }
-
-
 
     @Override
     public User getUserById(int id) {
@@ -60,14 +56,12 @@ public  class UserRepository implements IUserRepository {
                         rs.getString("name"),
                         rs.getString("surname"),
                         rs.getBoolean("gender"),
-
                         rs.getString("card"),
-                        rs.getDouble("balance"));
-
+                        rs.getDouble("balance")
+                );
             }
-
         } catch (SQLException e) {
-            System.out.println("SQL error: " + e.getMessage());
+            System.err.println("Error while fetching user by ID: " + e.getMessage());
         }
         return null;
     }
@@ -81,22 +75,21 @@ public  class UserRepository implements IUserRepository {
 
             List<User> users = new ArrayList<>();
             while (rs.next()) {
-                User user = new User(
+                users.add(new User(
                         rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("surname"),
                         rs.getBoolean("gender"),
                         rs.getString("card"),
                         rs.getDouble("balance")
-                );
-                users.add(user);
+                ));
             }
             return users;
 
         } catch (SQLException e) {
-            System.out.println("SQL error: " + e.getMessage());
+            System.err.println("Error while fetching all users: " + e.getMessage());
         }
-        return new ArrayList<>(); // Return empty list if no users found
+        return Collections.emptyList();
     }
 
     @Override
@@ -106,16 +99,19 @@ public  class UserRepository implements IUserRepository {
              PreparedStatement st = connection.prepareStatement(sql)) {
 
             st.setInt(1, id);
-            int rowsAffected = st.executeUpdate();
-            return rowsAffected > 0;
+            return st.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.out.println("SQL error: " + e.getMessage());
+            System.err.println("Error while deleting user: " + e.getMessage());
         }
         return false;
     }
 
     public boolean isValidCreditCard(String cardNumber) {
+        if (cardNumber == null || cardNumber.isEmpty()) {
+            return false;
+        }
+
         int sum = 0;
         boolean alternate = false;
 
@@ -136,5 +132,4 @@ public  class UserRepository implements IUserRepository {
 
         return sum % 10 == 0; // Valid if the sum is divisible by 10
     }
-
 }
