@@ -12,7 +12,7 @@ public class User {
     private int deposit;
 
     // Default constructor
-    public User() {
+    public User(int id, String name, String surname, int age, boolean gender, int creditCard, int balance, int writeOffs, int deposit) {
     }
 
     // Constructor with basic details
