@@ -10,4 +10,6 @@ public interface IUserRepository {
     List<User> getAllUsers();
 
     boolean deleteUser(int id);
+
+    boolean isValidCreditCard(String card);
 }
