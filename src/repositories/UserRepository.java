@@ -17,9 +17,16 @@ public  class UserRepository implements IUserRepository {
 
     @Override
     public boolean createUser(User user) {
-        String sql = "INSERT INTO users(name, surname, gender, card, balance) VALUES (?, ?, ?, ?, ?)";
-        try (Connection connection = db.getConnection();
-             PreparedStatement st = connection.prepareStatement(sql)) {
+        if (!isValidCreditCard(user.getCard())) { // Validate the credit card
+            System.out.println("Invalid credit card number.");
+            return false; // Return early if the card is invalid
+        }
+
+        Connection connection = null;
+        try {
+            connection = db.getConnection();
+            String sql = "INSERT INTO users(name, surname, gender, card, balance) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement st = connection.prepareStatement(sql);
 
             st.setString(1, user.getName());
             st.setString(2, user.getSurname());
@@ -35,6 +42,8 @@ public  class UserRepository implements IUserRepository {
         }
         return false;
     }
+
+
 
     @Override
     public User getUserById(int id) {
@@ -104,4 +113,27 @@ public  class UserRepository implements IUserRepository {
         }
         return false;
     }
+
+    public boolean isValidCreditCard(String cardNumber) {
+        int sum = 0;
+        boolean alternate = false;
+
+        // Start from the rightmost digit and iterate left
+        for (int i = cardNumber.length() - 1; i >= 0; i--) {
+            int digit = Character.getNumericValue(cardNumber.charAt(i));
+
+            if (alternate) {
+                digit *= 2; // Double every second digit
+                if (digit > 9) {
+                    digit -= 9;
+                }
+            }
+
+            sum += digit; // Add the digit to the sum
+            alternate = !alternate; // Toggle the alternate flag
+        }
+
+        return sum % 10 == 0; // Valid if the sum is divisible by 10
+    }
+
 }
