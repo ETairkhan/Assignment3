@@ -6,12 +6,24 @@ public class User {
     private String surname;
     private int age;
     private boolean gender; // true = male, false = female
+<<<<<<< HEAD
+=======
+    private int creditCard; // Renamed for better readability
+>>>>>>> 5bb5980bb629060b5f3abcbd8033620850152cf4
     private int balance;
     private int writeOffs;
     private int deposit;
 
     // Default constructor
+    public User(int id, String name, String surname, int age, boolean gender, int creditCard, int balance, int writeOffs, int deposit) {
+    }
+
+    // Constructor with basic details
     public User(int id, String name, String surname, boolean gender) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.gender = gender;
     }
 
     // Constructor with all fields
@@ -20,9 +32,16 @@ public class User {
         this.surname = surname;
         this.age = validateAge(age);
         this.gender = gender;
+<<<<<<< HEAD
         this.balance = balance;
         this.writeOffs = writeOffs;
         this.deposit = deposit;
+=======
+        this.creditCard = validateNonNegative(creditCard, "Credit Card");
+        this.balance = validateNonNegative(balance, "Balance");
+        this.writeOffs = validateNonNegative(writeOffs, "Write Offs");
+        this.deposit = validateNonNegative(deposit, "Deposit");
+>>>>>>> 5bb5980bb629060b5f3abcbd8033620850152cf4
     }
 
     // Constructor with ID and basic details
@@ -39,6 +58,14 @@ public class User {
             throw new IllegalArgumentException("Age must be between 0 and 120.");
         }
         return age;
+    }
+
+    // Generic validation for non-negative fields
+    private int validateNonNegative(int value, String fieldName) {
+        if (value < 0) {
+            throw new IllegalArgumentException(fieldName + " cannot be negative.");
+        }
+        return value;
     }
 
     // Getter and Setter methods
@@ -74,7 +101,7 @@ public class User {
         this.age = validateAge(age);
     }
 
-    public boolean getGender() {
+    public boolean isGender() { // Renamed getter to isGender
         return gender;
     }
 
@@ -82,12 +109,12 @@ public class User {
         this.gender = gender;
     }
 
-    public int getCreditcard() {
-        return creditcard;
+    public int getCreditCard() {
+        return creditCard;
     }
 
-    public void setCreditcard(int creditcard) {
-        this.creditcard = creditcard;
+    public void setCreditCard(int creditCard) {
+        this.creditCard = validateNonNegative(creditCard, "Credit Card");
     }
 
     public int getBalance() {
@@ -95,7 +122,7 @@ public class User {
     }
 
     public void setBalance(int balance) {
-        this.balance = balance;
+        this.balance = validateNonNegative(balance, "Balance");
     }
 
     public int getWriteOffs() {
@@ -103,7 +130,7 @@ public class User {
     }
 
     public void setWriteOffs(int writeOffs) {
-        this.writeOffs = writeOffs;
+        this.writeOffs = validateNonNegative(writeOffs, "Write Offs");
     }
 
     public int getDeposit() {
@@ -111,7 +138,7 @@ public class User {
     }
 
     public void setDeposit(int deposit) {
-        this.deposit = deposit;
+        this.deposit = validateNonNegative(deposit, "Deposit");
     }
 
     @Override
@@ -122,7 +149,11 @@ public class User {
                 ", surname='" + surname + '\'' +
                 ", age=" + age +
                 ", gender=" + (gender ? "Male" : "Female") +
+<<<<<<< HEAD
                 ", creditcard=" + creditCard +
+=======
+                ", creditCard=" + creditCard +
+>>>>>>> 5bb5980bb629060b5f3abcbd8033620850152cf4
                 ", balance=" + balance +
                 ", writeOffs=" + writeOffs +
                 ", deposit=" + deposit +

@@ -16,8 +16,6 @@ public class Main {
         app.start();
 
         db.close();
-
-        ArrayList list = new ArrayList();
-
     }
 }
+
