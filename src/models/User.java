@@ -52,6 +52,9 @@ public class User {
         this.age = validateAge(age);
     }
 
+    public User(Object o) {
+    }
+
     // Validation for age
     private int validateAge(int age) {
         if (age < 0 || age > 120) {
@@ -153,7 +156,7 @@ public class User {
                 ", creditcard=" + creditCard +
 =======
                 ", creditCard=" + creditCard +
->>>>>>> 5bb5980bb629060b5f3abcbd8033620850152cf4
+
                 ", balance=" + balance +
                 ", writeOffs=" + writeOffs +
                 ", deposit=" + deposit +
