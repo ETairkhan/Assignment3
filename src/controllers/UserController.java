@@ -7,91 +7,84 @@ import repositories.interfaces.IUserRepository;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class UserController implements IUserController {
-    private static final Logger logger = Logger.getLogger(UserController.class.getName());
-    private final IUserRepository repo;
 
-    public UserController(IUserRepository repo) {
-        this.repo = repo;
+public class UserController implements IUserController {
+    private static final Logger LOGGER = Logger.getLogger(UserController.class.getName());
+    private final IUserRepository userRepository;
+
+    public UserController(IUserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-
-    private boolean validateUserInput(String name, String surname, String gender) {
-        // Validating that name and surname are not empty, and gender is either "male" or "female"
-        return name != null && !name.isEmpty()
-                && surname != null && !surname.isEmpty()
-                && (gender.equalsIgnoreCase("male") || gender.equalsIgnoreCase("female"));
+    private boolean isValidUserInput(String name, String surname, String gender) {
+        if (name == null || name.isEmpty()) {
+            return false;
+        }
+        if (surname == null || surname.isEmpty()) {
+            return false;
+        }
+        return "male".equalsIgnoreCase(gender) || "female".equalsIgnoreCase(gender);
     }
 
     @Override
     public String createUser(String name, String surname, String gender) {
-        logger.info("Creating user: name=" + name + ", surname=" + surname + ", gender=" + gender);
+        LOGGER.info(String.format("Attempting to create user: name=%s, surname=%s, gender=%s", name, surname, gender));
+
+        if (!isValidUserInput(name, surname, gender)) {
+            return "Invalid input: Name and surname cannot be empty, and gender must be 'male' or 'female'.";
+        }
+
         try {
-            // Validation
-            if (!validateUserInput(name, surname, gender)) { // Using the validateUserInput method inside UserController
-                return "Invalid input: Name and surname cannot be empty, and gender must be 'male' or 'female'.";
-            }
-
-            boolean male = gender.equalsIgnoreCase("male");
-            // Default values for optional fields
-            int defaultAge = 18;
-            int defaultCreditCard = 0;
-            int defaultBalance = 0;
-            int defaultWriteOffs = 0;
-            int defaultDeposit = 0;
-
-            // Create user object
             User user = new User(
                     name,
                     surname,
-                    defaultAge,
-                    male,
-                    defaultCreditCard,
-                    defaultBalance,
-                    defaultWriteOffs,
-                    defaultDeposit
+                    18, // Default age
+                    "male".equalsIgnoreCase(gender),
+                    0, // Default credit card
+                    0, // Default balance
+                    0, // Default write-offs
+                    0  // Default deposit
             );
 
-            // Save user in repository
-            boolean created = repo.createUser(user);
-            return created ? "User was created successfully." : "User creation failed.";
+            boolean isCreated = userRepository.createUser(user);
+            return isCreated ? "User created successfully." : "Failed to create user.";
         } catch (Exception e) {
-            logger.severe("Error during user creation: " + e.getMessage());
-            return "Error during user creation: " + e.getMessage();
+            LOGGER.severe("Error while creating user: " + e.getMessage());
+            return "Error while creating user: " + e.getMessage();
         }
     }
 
     @Override
     public String getUserById(int id) {
-        logger.info("Fetching user by ID: " + id);
+        LOGGER.info("Fetching user with ID: " + id);
+
         try {
-            User user = repo.getUserById(id);
-            return (user == null) ? "User not found with ID: " + id : user.toString();
+            User user = userRepository.getUserById(id);
+            return user != null ? user.toString() : "User not found with ID: " + id;
         } catch (Exception e) {
-            logger.severe("Error fetching user by ID: " + e.getMessage());
-            return "Error fetching user by ID: " + e.getMessage();
+            LOGGER.severe("Error while fetching user by ID: " + e.getMessage());
+            return "Error while fetching user by ID: " + e.getMessage();
         }
     }
 
     @Override
     public String getAllUsers() {
-        logger.info("Fetching all users...");
+        LOGGER.info("Fetching all users.");
+
         try {
-            List<User> users = repo.getAllUsers();
+            List<User> users = userRepository.getAllUsers();
+
             if (users == null || users.isEmpty()) {
                 return "No users found in the system.";
             }
 
-            // Using StringBuilder for efficient concatenation
-            StringBuilder response = new StringBuilder("List of Users:\n");
-            for (User user : users) {
-                response.append(user).append("\n");
-            }
+            StringBuilder responseBuilder = new StringBuilder("List of Users:\n");
+            users.forEach(user -> responseBuilder.append(user).append("\n"));
 
-            return response.toString();
+            return responseBuilder.toString();
         } catch (Exception e) {
-            logger.severe("Error fetching all users: " + e.getMessage());
-            return "Error fetching all users: " + e.getMessage();
+            LOGGER.severe("Error while fetching all users: " + e.getMessage());
+            return "Error while fetching all users: " + e.getMessage();
         }
     }
 }
