@@ -19,7 +19,7 @@ public class MyApplication {
         System.out.println("1. Get all users");
         System.out.println("2. Get user by id");
         System.out.println("3. Create new user");
-        System.out.println("4 Delete user");
+        System.out.println("4. Delete user");
         System.out.println("0. Exit");
         System.out.println();
         System.out.print("Select an option (1-3): ");
@@ -54,8 +54,10 @@ public class MyApplication {
         String surname = scanner.next();
         System.out.println("Please enter gender (male/female): ");
         String gender = scanner.next();
+        System.out.println("Please enter credit card number: ");
+        String creditCardNumber = scanner.next();
 
-        String response = controller.createUser(name, surname, gender);
+        String response = controller.createUser(name, surname, gender, creditCardNumber);
         System.out.println(response);
     }
 

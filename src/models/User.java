@@ -5,19 +5,20 @@ public class User {
     private String name;
     private String surname;
     private boolean gender;
+    private String creditCardNumber;
 
     public User(){
 
     }
 
-    public User(String name, String surname, boolean gender) {
+    public User(String name, String surname, boolean gender, String creditCardNumber) {
         setName(name);
         setSurname(surname);
         setGender(gender);
     }
 
-    public User(int id, String name, String surname, boolean gender) {
-        this(name, surname, gender);
+    public User(int id, String name, String surname, boolean gender, String creditCardNumber) {
+        this(name, surname, gender, creditCardNumber);
         setId(id);
     }
 
@@ -53,13 +54,21 @@ public class User {
         this.gender = gender;
     }
 
+    public String getCreditCardNumber() {
+        return creditCardNumber;
+    }
+    public void setCreditCardNumber(String creditCardNumber) {
+        this.creditCardNumber = creditCardNumber;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", gender=" + gender +
+                ", gender=" + gender + '\n' +
+                ", creditCardNumber=" + creditCardNumber +
                 '}';
     }
 }
