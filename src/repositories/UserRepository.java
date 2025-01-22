@@ -20,13 +20,13 @@ public class UserRepository implements IUserRepository {
         Connection connection = null;
         try {
             connection = db.getConnection();
-            String sql ="INSERT INTO users(name, surname, gender, creditCardNumber) VALUES (?, ?, ?, ?)";
+            String sql ="INSERT INTO users(name, surname, gender, card) VALUES (?, ?, ?, ?)";
             PreparedStatement st = connection.prepareStatement(sql);
 
             st.setString(1, user.getName());
             st.setString(2, user.getSurname());
             st.setBoolean(3, user.getGender());
-            st.setString(4, user.getCreditCardNumber()); // Include creditCardNumber
+            st.setString(4, user.getCard()); // Include creditCardNumber
 
             st.execute();
 
@@ -65,7 +65,7 @@ public class UserRepository implements IUserRepository {
         Connection connection = null;
         try{
             connection = db.getConnection();
-            String sql ="SELECT id, name, surname, gender FROM users";
+            String sql ="SELECT id, name, surname, gender, card FROM users";
             Statement st = connection.createStatement();
 
             ResultSet rs = st.executeQuery(sql);
