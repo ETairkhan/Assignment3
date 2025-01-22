@@ -4,25 +4,70 @@ public class User {
     private int id;
     private String name;
     private String surname;
+<<<<<<< HEAD
     private boolean gender;
     private String email;
     private int securityPin;
 
     public User(){
+=======
+    private int age;
+    private boolean gender; // true = male, false = female
+    private int creditCard; // Renamed for better readability
+    private int balance;
+    private int writeOffs;
+    private int deposit;
+>>>>>>> 9d344cb9b7bd7def0e717201cf8ef39f0cf94f8b
 
+    // Default constructor
+    public User(int id, String name, String surname, int age, boolean gender, int creditCard, int balance, int writeOffs, int deposit) {
     }
 
-    public User(String name, String surname, boolean gender) {
-        setName(name);
-        setSurname(surname);
-        setGender(gender);
-    }
-
+    // Constructor with basic details
     public User(int id, String name, String surname, boolean gender) {
-        this(name, surname, gender);
-        setId(id);
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.gender = gender;
     }
 
+    // Constructor with all fields
+    public User(String name, String surname, int age, boolean gender, int creditCard, int balance, int writeOffs, int deposit) {
+        this.name = name;
+        this.surname = surname;
+        this.age = validateAge(age);
+        this.gender = gender;
+        this.creditCard = validateNonNegative(creditCard, "Credit Card");
+        this.balance = validateNonNegative(balance, "Balance");
+        this.writeOffs = validateNonNegative(writeOffs, "Write Offs");
+        this.deposit = validateNonNegative(deposit, "Deposit");
+    }
+
+    // Constructor with ID and basic details
+    public User(int id, String name, String surname, int age) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.age = validateAge(age);
+    }
+
+    // Validation for age
+    private int validateAge(int age) {
+        if (age < 0 || age > 120) {
+            throw new IllegalArgumentException("Age must be between 0 and 120.");
+        }
+        return age;
+    }
+
+    // Generic validation for non-negative fields
+    private int validateNonNegative(int value, String fieldName) {
+        if (value < 0) {
+            throw new IllegalArgumentException(fieldName + " cannot be negative.");
+        }
+        return value;
+    }
+
+    // Getter and Setter methods
     public int getId() {
         return id;
     }
@@ -47,12 +92,52 @@ public class User {
         this.surname = surname;
     }
 
-    public boolean getGender() {
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = validateAge(age);
+    }
+
+    public boolean isGender() { // Renamed getter to isGender
         return gender;
     }
 
     public void setGender(boolean gender) {
         this.gender = gender;
+    }
+
+    public int getCreditCard() {
+        return creditCard;
+    }
+
+    public void setCreditCard(int creditCard) {
+        this.creditCard = validateNonNegative(creditCard, "Credit Card");
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = validateNonNegative(balance, "Balance");
+    }
+
+    public int getWriteOffs() {
+        return writeOffs;
+    }
+
+    public void setWriteOffs(int writeOffs) {
+        this.writeOffs = validateNonNegative(writeOffs, "Write Offs");
+    }
+
+    public int getDeposit() {
+        return deposit;
+    }
+
+    public void setDeposit(int deposit) {
+        this.deposit = validateNonNegative(deposit, "Deposit");
     }
 
     @Override
@@ -61,7 +146,12 @@ public class User {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", gender=" + gender +
+                ", age=" + age +
+                ", gender=" + (gender ? "Male" : "Female") +
+                ", creditCard=" + creditCard +
+                ", balance=" + balance +
+                ", writeOffs=" + writeOffs +
+                ", deposit=" + deposit +
                 '}';
     }
 }
