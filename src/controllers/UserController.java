@@ -13,9 +13,9 @@ public class UserController implements IUserController {
         this.repo = repo;
     }
     @Override
-    public String createUser(String name, String surname, String gender, String card) {
+    public String createUser(String name, String surname, String gender, String card, double balance) {
         boolean male = gender.equalsIgnoreCase("male");
-        User user = new User(name, surname, male, card);
+        User user = new User(name, surname, male, card, balance);
         boolean created = repo.createUser(user);
         return (created) ? "User was created" : "User creation was failed";
     }
@@ -40,4 +40,5 @@ public class UserController implements IUserController {
         boolean deleted = repo.deleteUser(id);
         return (deleted) ? "User was successfully deleted." : "User deletion failed. User may not exist.";
     }
+
 }

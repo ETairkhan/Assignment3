@@ -6,20 +6,24 @@ public class User {
     private String surname;
     private boolean gender;
     private String card;
+    private double balance;
 
     public User(){
 
     }
 
-    public User(String name, String surname, boolean gender, String card) {
+public User(String name, String surname, boolean gender, String card, double balance) {
         setName(name);
         setSurname(surname);
         setGender(gender);
         setCard(card);
+        setBalance(balance);
+
+
     }
 
-    public User(int id, String name, String surname, boolean gender, String card) {
-        this(name, surname, gender, card);
+    public User(int id, String name, String surname, boolean gender, String card, double balance) {
+        this(name, surname, gender, card, balance);
         setId(id);
     }
 
@@ -62,6 +66,16 @@ public class User {
         this.card = card;
     }
 
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+
+
     @Override
     public String toString() {
         return "User{" +
@@ -70,6 +84,8 @@ public class User {
                 ", surname='" + surname + '\'' +
                 ", gender=" + gender + '\n' +
                 ", creditCardNumber=" + card +
+                ", balance=" + balance +
                 '}';
+
     }
 }
