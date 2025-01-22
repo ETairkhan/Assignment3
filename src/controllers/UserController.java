@@ -35,4 +35,9 @@ public class UserController implements IUserController {
         }
         return responce.toString();
     }
+    @Override
+    public String deleteUser(int id) {
+        boolean deleted = repo.deleteUser(id);
+        return (deleted) ? "User was successfully deleted." : "User deletion failed. User may not exist.";
+    }
 }

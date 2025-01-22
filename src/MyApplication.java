@@ -19,6 +19,7 @@ public class MyApplication {
         System.out.println("1. Get all users");
         System.out.println("2. Get user by id");
         System.out.println("3. Create new user");
+        System.out.println("4 Delete user");
         System.out.println("0. Exit");
         System.out.println();
         System.out.print("Select an option (1-3): ");
@@ -33,6 +34,7 @@ public class MyApplication {
                     case 1: getAllUsersMenu(); break;
                     case 2: getUserByIdMenu(); break;
                     case 3: createUserMenu(); break;
+                    case 4: deleteUser(); break;
                     default:return;
                 }
             }catch (InputMismatchException e){
@@ -67,6 +69,13 @@ public class MyApplication {
 
     private void getAllUsersMenu() {
         String response = controller.getAllUsers();
+        System.out.println(response);
+    }
+    private void deleteUser() {
+        System.out.println("Please enter a user id: ");
+        int id = scanner.nextInt();
+
+        String response = controller.deleteUser(id);
         System.out.println(response);
     }
 }

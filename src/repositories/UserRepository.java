@@ -81,4 +81,20 @@ public class UserRepository implements IUserRepository {
         }
         return null;
     }
+
+    @Override
+    public boolean deleteUser(int id) {
+        String sql = "DELETE FROM users WHERE id = ?";
+        try (Connection conn = db.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            int rowsAffected = stmt.executeUpdate();
+
+            return rowsAffected > 0; // Returns true if a row was deleted
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
