@@ -12,7 +12,7 @@ public class UserController {
     }
 
     public String createUser(String name, String surname, int age, boolean gender, int creditCard, int balance, int writeOffs, int deposit) {
-        controllers.User user = new User(name, surname, age, gender, creditCard, balance, writeOffs, deposit);
+        models.User user = new User(name, surname, age, gender, creditCard, balance, writeOffs, deposit);
         boolean isCreated = userRepository.createUser(user);
         return isCreated ? "User created successfully." : "Failed to create user.";
     }
