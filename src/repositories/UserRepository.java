@@ -7,8 +7,11 @@ import repositories.interfaces.IUserRepository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UserRepository implements IUserRepository {
+    private static final Logger LOGGER = Logger.getLogger(UserRepository.class.getName());
     private final IDB db;
 
     public UserRepository(IDB db) {
@@ -36,7 +39,7 @@ public class UserRepository implements IUserRepository {
             return rowsAffected > 0;
 
         } catch (SQLException e) {
-            System.err.println("SQL error: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "SQL error during user creation: " + e.getMessage(), e);
         }
         return false;
     }
@@ -65,7 +68,7 @@ public class UserRepository implements IUserRepository {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("SQL error: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "SQL error while fetching user by ID: " + e.getMessage(), e);
         }
         return null;
     }
@@ -94,9 +97,9 @@ public class UserRepository implements IUserRepository {
                 users.add(user);
             }
         } catch (SQLException e) {
-            System.err.println("SQL error: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "SQL error while fetching all users: " + e.getMessage(), e);
         }
-        return users;
+        return users;  // Return an empty list instead of null if no users are found
     }
 
     // Update a user
@@ -121,7 +124,7 @@ public class UserRepository implements IUserRepository {
             return rowsAffected > 0;
 
         } catch (SQLException e) {
-            System.err.println("SQL error: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "SQL error while updating user: " + e.getMessage(), e);
         }
         return false;
     }
@@ -138,7 +141,7 @@ public class UserRepository implements IUserRepository {
             return rowsAffected > 0;
 
         } catch (SQLException e) {
-            System.err.println("SQL error: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, "SQL error while deleting user: " + e.getMessage(), e);
         }
         return false;
     }

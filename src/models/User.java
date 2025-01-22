@@ -4,27 +4,15 @@ public class User {
     private int id;
     private String name;
     private String surname;
-<<<<<<< HEAD
-    private boolean gender;
-    private String email;
-    private int securityPin;
-
-    public User(){
-=======
     private int age;
     private boolean gender; // true = male, false = female
-<<<<<<< HEAD
-=======
     private int creditCard; // Renamed for better readability
->>>>>>> 5bb5980bb629060b5f3abcbd8033620850152cf4
     private int balance;
     private int writeOffs;
     private int deposit;
->>>>>>> 9d344cb9b7bd7def0e717201cf8ef39f0cf94f8b
 
     // Default constructor
-    public User(int id, String name, String surname, int age, boolean gender, int creditCard, int balance, int writeOffs, int deposit) {
-    }
+    public User(int id, String name, String surname, int age, boolean gender, int creditCard, int balance, int writeOffs, int deposit) {}
 
     // Constructor with basic details
     public User(int id, String name, String surname, boolean gender) {
@@ -40,16 +28,10 @@ public class User {
         this.surname = surname;
         this.age = validateAge(age);
         this.gender = gender;
-<<<<<<< HEAD
-        this.balance = balance;
-        this.writeOffs = writeOffs;
-        this.deposit = deposit;
-=======
         this.creditCard = validateNonNegative(creditCard, "Credit Card");
         this.balance = validateNonNegative(balance, "Balance");
         this.writeOffs = validateNonNegative(writeOffs, "Write Offs");
         this.deposit = validateNonNegative(deposit, "Deposit");
->>>>>>> 5bb5980bb629060b5f3abcbd8033620850152cf4
     }
 
     // Constructor with ID and basic details
@@ -58,9 +40,6 @@ public class User {
         this.name = name;
         this.surname = surname;
         this.age = validateAge(age);
-    }
-
-    public User(Object o) {
     }
 
     // Validation for age
@@ -112,7 +91,7 @@ public class User {
         this.age = validateAge(age);
     }
 
-    public boolean isGender() { // Renamed getter to isGender
+    public boolean isGender() {
         return gender;
     }
 
@@ -160,11 +139,7 @@ public class User {
                 ", surname='" + surname + '\'' +
                 ", age=" + age +
                 ", gender=" + (gender ? "Male" : "Female") +
-<<<<<<< HEAD
-                ", creditcard=" + creditCard +
-=======
                 ", creditCard=" + creditCard +
-
                 ", balance=" + balance +
                 ", writeOffs=" + writeOffs +
                 ", deposit=" + deposit +
