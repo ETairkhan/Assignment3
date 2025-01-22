@@ -53,13 +53,10 @@ public  class UserRepository implements IUserRepository {
                         rs.getString("name"),
                         rs.getString("surname"),
                         rs.getBoolean("gender"),
-<<<<<<< HEAD
-                        rs.getString("card")); // Include creditCardNumber
-=======
+
                         rs.getString("card"),
                         rs.getDouble("balance")
                 );
->>>>>>>
             }
 
         } catch (SQLException e) {
