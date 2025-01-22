@@ -1,10 +1,8 @@
 import controllers.interfaces.IUserController;
 import repositories.interfaces.IUserRepository;
-//smth
 import java.util.InputMismatchException;
 import java.util.Scanner;
-//chototam
-//dadaya
+
 public class MyApplication {
     private final IUserController controller;
     private final Scanner scanner = new Scanner(System.in);

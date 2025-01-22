@@ -3,7 +3,6 @@ package controllers;
 import controllers.interfaces.IUserController;
 import models.User;
 import repositories.interfaces.IUserRepository;
-import services.UserService;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -11,30 +10,54 @@ import java.util.logging.Logger;
 public class UserController implements IUserController {
     private static final Logger logger = Logger.getLogger(UserController.class.getName());
     private final IUserRepository repo;
-    private final UserService userService;
 
     public UserController(IUserRepository repo) {
         this.repo = repo;
-        this.userService = new UserService();
+    }
+
+
+    private boolean validateUserInput(String name, String surname, String gender) {
+        // Validating that name and surname are not empty, and gender is either "male" or "female"
+        return name != null && !name.isEmpty()
+                && surname != null && !surname.isEmpty()
+                && (gender.equalsIgnoreCase("male") || gender.equalsIgnoreCase("female"));
     }
 
     @Override
     public String createUser(String name, String surname, String gender) {
         logger.info("Creating user: name=" + name + ", surname=" + surname + ", gender=" + gender);
         try {
-            // Валидация данных
-            if (!userService.validateUserInput(name, surname, gender)) {
-                return Messages.INVALID_USER_INPUT;
+            // Validation
+            if (!validateUserInput(name, surname, gender)) { // Using the validateUserInput method inside UserController
+                return "Invalid input: Name and surname cannot be empty, and gender must be 'male' or 'female'.";
             }
 
             boolean male = gender.equalsIgnoreCase("male");
-            User user = new User(name, surname, male);
-            boolean created = repo.createUser(user);
+            // Default values for optional fields
+            int defaultAge = 18;
+            int defaultCreditCard = 0;
+            int defaultBalance = 0;
+            int defaultWriteOffs = 0;
+            int defaultDeposit = 0;
 
-            return created ? Messages.USER_CREATED : Messages.USER_CREATION_FAILED;
+            // Create user object
+            User user = new User(
+                    name,
+                    surname,
+                    defaultAge,
+                    male,
+                    defaultCreditCard,
+                    defaultBalance,
+                    defaultWriteOffs,
+                    defaultDeposit
+            );
+
+            // Save user in repository
+            boolean created = repo.createUser(user);
+            return created ? "User was created successfully." : "User creation failed.";
         } catch (Exception e) {
             logger.severe("Error during user creation: " + e.getMessage());
-            return Messages.ERROR_DURING_CREATION + e.getMessage();
+            return "Error during user creation: " + e.getMessage();
         }
     }
 
@@ -43,10 +66,10 @@ public class UserController implements IUserController {
         logger.info("Fetching user by ID: " + id);
         try {
             User user = repo.getUserById(id);
-            return (user == null) ? Messages.USER_NOT_FOUND : user.toString();
+            return (user == null) ? "User not found with ID: " + id : user.toString();
         } catch (Exception e) {
             logger.severe("Error fetching user by ID: " + e.getMessage());
-            return Messages.ERROR_FETCHING_USER + e.getMessage();
+            return "Error fetching user by ID: " + e.getMessage();
         }
     }
 
@@ -56,40 +79,19 @@ public class UserController implements IUserController {
         try {
             List<User> users = repo.getAllUsers();
             if (users == null || users.isEmpty()) {
-                return Messages.NO_USERS_FOUND;
+                return "No users found in the system.";
             }
 
-            // Использование Stream API для преобразования списка пользователей в строку
-            return users.stream()
-                    .map(User::toString)
-                    .reduce("", (user1, user2) -> user1 + user2 + "\n");
+            // Using StringBuilder for efficient concatenation
+            StringBuilder response = new StringBuilder("List of Users:\n");
+            for (User user : users) {
+                response.append(user).append("\n");
+            }
+
+            return response.toString();
         } catch (Exception e) {
             logger.severe("Error fetching all users: " + e.getMessage());
-            return Messages.ERROR_FETCHING_USERS + e.getMessage();
+            return "Error fetching all users: " + e.getMessage();
         }
     }
-}
-
-
-package services;
-
-public class UserService {
-    public boolean validateUserInput(String name, String surname, String gender) {
-        return name != null && !name.isEmpty()
-                && surname != null && !surname.isEmpty()
-                && (gender.equalsIgnoreCase("male") || gender.equalsIgnoreCase("female"));
-    }
-}
-
-package controllers;
-
-public class Messages {
-    public static final String USER_CREATED = "User was created successfully.";
-    public static final String USER_CREATION_FAILED = "User creation failed.";
-    public static final String INVALID_USER_INPUT = "Invalid input: Name and surname cannot be empty, and gender must be 'male' or 'female'.";
-    public static final String USER_NOT_FOUND = "User was not found.";
-    public static final String NO_USERS_FOUND = "No users found.";
-    public static final String ERROR_DURING_CREATION = "Error during user creation: ";
-    public static final String ERROR_FETCHING_USER = "Error fetching user by ID: ";
-    public static final String ERROR_FETCHING_USERS = "Error fetching users: ";
 }
