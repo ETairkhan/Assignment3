@@ -22,11 +22,11 @@ public  class UserRepository implements IUserRepository {
             return false; // Return early if the card is invalid
         }
 
-        Connection connection = null;
-        try {
-            connection = db.getConnection();
-            String sql = "INSERT INTO users(name, surname, gender, card, balance) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement st = connection.prepareStatement(sql);
+
+        String sql = "INSERT INTO users(name, surname, gender, card, balance) VALUES (?, ?, ?, ?, ?)";
+        try (Connection connection = db.getConnection();
+             PreparedStatement st = connection.prepareStatement(sql)) {
+
 
             st.setString(1, user.getName());
             st.setString(2, user.getSurname());
@@ -61,8 +61,7 @@ public  class UserRepository implements IUserRepository {
                         rs.getString("surname"),
                         rs.getBoolean("gender"),
                         rs.getString("card"),
-                        rs.getDouble("balance")
-                );
+                        rs.getDouble("balance"));
             }
 
         } catch (SQLException e) {
