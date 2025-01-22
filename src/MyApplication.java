@@ -8,6 +8,7 @@ public class MyApplication {
     private final IUserController controller;
     private final Scanner scanner = new Scanner(System.in);
 
+
     public MyApplication(IUserController controller) {
         this.controller = controller;
     }
@@ -22,7 +23,7 @@ public class MyApplication {
         System.out.println("4. Delete user");
         System.out.println("0. Exit");
         System.out.println();
-        System.out.print("Select an option (1-3): ");
+        System.out.print("Select an option (1-4): ");
     }
 
     public void start(){
@@ -39,7 +40,7 @@ public class MyApplication {
                 }
             }catch (InputMismatchException e){
                 System.out.println("Please enter a valid option!" + e);
-                scanner.nextLine(); //to ignore incorrect input
+                scanner.nextLine();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -56,8 +57,11 @@ public class MyApplication {
         String gender = scanner.next();
         System.out.println("Please enter credit card number: ");
         String creditCardNumber = scanner.next();
+        System.out.println("Please enter balance: "); // Prompt for balance
+        double balance = scanner.nextDouble();
 
-        String response = controller.createUser(name, surname, gender, creditCardNumber);
+
+        String response = controller.createUser(name, surname, gender, creditCardNumber, balance);
         System.out.println(response);
     }
 
