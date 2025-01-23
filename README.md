@@ -12,9 +12,11 @@ Select one of the following options:
 6. Transfer Money
 0. Exit
 Detailed Instructions
+
 Get All Users:
 
 Displays a list of all users in the database.
+
 Get User by ID:
 
 Prompts for a user ID and displays information about the corresponding user.
