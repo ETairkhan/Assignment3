@@ -5,4 +5,5 @@ public interface IUserController {
     String getUserById(int id);
     String getAllUsers();
     String deleteUser(int id);
+    String transferMoney(int senderId, int receiverId, double amount);
 }

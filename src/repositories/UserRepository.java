@@ -116,4 +116,21 @@ public class UserRepository implements IUserRepository {
         }
         return false;
     }
+    @Override
+    public boolean updateUserBalance(User user) {
+        String sql = "UPDATE users SET balance = ? WHERE id = ?";
+        try (Connection connection = db.getConnection();
+             PreparedStatement st = connection.prepareStatement(sql)) {
+
+            st.setDouble(1, user.getBalance());
+            st.setInt(2, user.getId());
+
+            return st.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error while updating user balance: " + e.getMessage());
+        }
+        return false;
+    }
+
 }

@@ -79,4 +79,39 @@ public class UserController implements IUserController {
         return (deleted) ? "User was successfully deleted." : "User deletion failed. User may not exist.";
     }
 
+    @Override
+    public String transferMoney(int senderId, int receiverId, double amount) {
+        if (amount <= 0) {
+            return "Invalid transfer amount. Transfer failed.";
+        }
+
+        // Fetch sender and receiver details
+        User sender = repo.getUserById(senderId);
+        User receiver = repo.getUserById(receiverId);
+
+        if (sender == null) {
+            return "Sender not found. Transfer failed.";
+        }
+        if (receiver == null) {
+            return "Receiver not found. Transfer failed.";
+        }
+
+        if (sender.getBalance() < amount) {
+            return "Insufficient balance. Transfer failed.";
+        }
+
+        // Perform balance updates
+        sender.setBalance(sender.getBalance() - amount);
+        receiver.setBalance(receiver.getBalance() + amount);
+
+        boolean senderUpdated = repo.updateUserBalance(sender);
+        boolean receiverUpdated = repo.updateUserBalance(receiver);
+
+        if (senderUpdated && receiverUpdated) {
+            return "Transfer successful. Transferred " + amount + " from User " + senderId + " to User " + receiverId + ".";
+        } else {
+            return "Transfer failed due to a database error.";
+        }
+    }
+
 }
