@@ -1,3 +1,15 @@
+Topic:
+
+"User Cretid Card with Enhanced Financial Transactions"
+
+Definition:
+
+The project is a user management application designed to handle user data, including personal details (name, surname, gender) and financial information (card details, balance). It also includes additional functionality to:
+
+Securely manage user credit card and bank account data using Luhn validation.
+Generate valid card numbers for different brands and issuers.
+Transfer money between users with balance checks and transaction safety using database transactions.
+
 How to Use
 Main Menu
 After launching the application, you’ll see the following options:
