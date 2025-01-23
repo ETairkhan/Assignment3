@@ -19,14 +19,12 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public boolean createUser(User user) {
-
         if (user == null || user.getCard() == null || !Validator.isValidLuhn(user.getCard())) {
             System.out.println("Invalid input or credit card number.");
             return false;
-
         }
 
-        String sql = "INSERT INTO users(name, surname, gender, card, balance) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users(name, surname, gender, card, balance, brand, issuer) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = db.getConnection();
              PreparedStatement st = connection.prepareStatement(sql)) {
 
@@ -35,6 +33,8 @@ public class UserRepository implements IUserRepository {
             st.setBoolean(3, user.getGender());
             st.setString(4, user.getCard());
             st.setDouble(5, user.getBalance());
+            st.setString(6, user.getBrand());
+            st.setString(7, user.getIssuer());
 
             return st.executeUpdate() > 0;
 
@@ -43,6 +43,7 @@ public class UserRepository implements IUserRepository {
         }
         return false;
     }
+
 
     @Override
     public User getUserById(int id) {
@@ -60,7 +61,9 @@ public class UserRepository implements IUserRepository {
                         rs.getString("surname"),
                         rs.getBoolean("gender"),
                         rs.getString("card"),
-                        rs.getDouble("balance")
+                        rs.getDouble("balance"),
+                        rs.getString("brand"),
+                        rs.getString("issuer")
                 );
             }
         } catch (SQLException e) {
@@ -69,9 +72,10 @@ public class UserRepository implements IUserRepository {
         return null;
     }
 
+
     @Override
     public List<User> getAllUsers() {
-        String sql = "SELECT id, name, surname, gender, card, balance FROM users";
+        String sql = "SELECT id, name, surname, gender, card, balance, brand, issuer FROM users";
         try (Connection connection = db.getConnection();
              Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -84,7 +88,9 @@ public class UserRepository implements IUserRepository {
                         rs.getString("surname"),
                         rs.getBoolean("gender"),
                         rs.getString("card"),
-                        rs.getDouble("balance")
+                        rs.getDouble("balance"),
+                        rs.getString("brand"),
+                        rs.getString("issuer")
                 ));
             }
             return users;
@@ -94,6 +100,7 @@ public class UserRepository implements IUserRepository {
         }
         return Collections.emptyList();
     }
+
 
     @Override
     public boolean deleteUser(int id) {
