@@ -20,17 +20,21 @@ Displays a list of all users in the database.
 Get User by ID:
 
 Prompts for a user ID and displays information about the corresponding user.
+
 Create New User:
 
 Input details such as name, surname, gender, credit card number, and initial balance.
 Validates the credit card using the Luhn Algorithm.
+
 Delete User:
 
 Input a user ID to remove the corresponding user.
+
 Generate Card Number:
 
 Input a card brand (e.g., VISA, MASTERCARD) and issuer (e.g., Kaspi Gold, Forte Blue).
 Generates a valid credit card number using brand prefixes and issuer data.
+
 Transfer Money:
 
 Input sender ID, receiver ID, and amount.
