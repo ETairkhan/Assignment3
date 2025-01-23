@@ -19,26 +19,30 @@ public class UserController implements IUserController {
     public String createUser(String name, String surname, String gender, String card, double balance) {
 
         if (!Validator.isValidLuhn(card)) { // Validate credit card number
-
             return "Invalid credit card number. User creation failed.";
         }
 
         boolean male = gender.equalsIgnoreCase("male");
 
-        // Determine the brand and issuer using CardInformation
-        Map<String, String> brands = CardInformation.loadData("src/resources/brands.txt");
+        // Load brands and issuers
         Map<String, String> issuers = CardInformation.loadData("src/resources/issuers.txt");
+        Map<String, List<String>> brands = CardInformation.loadDataAsList("src/resources/brands.txt");
 
         String brand = "-";
         String issuer = "-";
 
-        for (Map.Entry<String, String> entry : brands.entrySet()) {
-            if (card.startsWith(entry.getKey())) {
-                brand = entry.getValue();
-                break;
+        // Check for brand
+        for (Map.Entry<String, List<String>> entry : brands.entrySet()) {
+            for (String prefix : entry.getValue()) { // Loop through all prefixes for the brand
+                if (card.startsWith(prefix)) {
+                    brand = entry.getKey();
+                    break;
+                }
             }
+            if (!brand.equals("-")) break; // Break outer loop if brand is found
         }
 
+        // Check for issuer
         for (Map.Entry<String, String> entry : issuers.entrySet()) {
             if (card.startsWith(entry.getKey())) {
                 issuer = entry.getValue();
@@ -46,10 +50,12 @@ public class UserController implements IUserController {
             }
         }
 
+        // Create user object
         User user = new User(name, surname, male, card, balance, brand, issuer);
         boolean created = repo.createUser(user);
         return (created) ? "User was created" : "User creation failed";
     }
+
 
 
     @Override

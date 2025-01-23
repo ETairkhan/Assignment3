@@ -66,7 +66,7 @@ public class MyApplication {
         String creditCardNumber = scanner.next();
         if (!Validator.validate(creditCardNumber)) {
             System.out.println("Invalid credit card number. User creation failed.");
-            return; // Exit if validation fails
+            return;
         }
         System.out.println("Please enter balance: ");
         try {
