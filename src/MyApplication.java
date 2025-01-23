@@ -69,13 +69,18 @@ public class MyApplication {
             return; // Exit if validation fails
         }
         System.out.println("Please enter balance: ");
-        double balance = scanner.nextDouble();
-
-
-
-
-        String response = controller.createUser(name, surname, gender, creditCardNumber, balance);
-        System.out.println(response);
+        try {
+            double balance = scanner.nextDouble();
+            if (balance < 0){
+                System.out.println("Invalid balance. User creation failed.");
+                return;
+            }
+            String response = controller.createUser(name, surname, gender, creditCardNumber, balance);
+            System.out.println(response);
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input for balance. User creation failed.");
+            scanner.nextLine();
+        }
 
 
     }
