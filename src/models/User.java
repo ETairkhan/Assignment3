@@ -78,14 +78,14 @@ public User(String name, String surname, boolean gender, String card, double bal
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", gender=" + gender + '\n' +
-                ", creditCardNumber=" + card +
-                ", balance=" + balance +
-                '}';
-
+        return "User {\n" +
+                "  id: " + id + ",\n" +
+                "  name: '" + name + "',\n" +
+                "  surname: '" + surname + "',\n" +
+                "  gender: " + (gender ? "Male" : "Female") + ",\n" +
+                "  creditCardNumber: '" + card + "',\n" +
+                "  balance: " + balance + "\n" +
+                "}";
     }
+
 }

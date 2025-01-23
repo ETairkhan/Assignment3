@@ -62,7 +62,7 @@ public class MyApplication {
             System.out.println("Invalid credit card number. User creation failed.");
             return; // Exit if validation fails
         }
-        System.out.println("Please enter balance: "); // Prompt for balance
+        System.out.println("Please enter balance: ");
         double balance = scanner.nextDouble();
 
 

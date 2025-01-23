@@ -8,9 +8,9 @@ import java.sql.SQLException;
 
 public class PostgresDB implements IDB {
     private String host;
-    private String username; //postgres username
-    private String password; //postgres password
-    private String dbName; //postgres database
+    private String username;
+    private String password;
+    private String dbName;
 
     private Connection connection;
 
@@ -61,7 +61,7 @@ public class PostgresDB implements IDB {
 
                 return connection;
             }
-            Class.forName("org.postgresql.Driver"); //check JDBC driver existence
+            Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(connectionUrl, username, password);
             return connection;
         }catch (Exception e) {
