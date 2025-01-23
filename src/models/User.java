@@ -7,23 +7,25 @@ public class User {
     private boolean gender;
     private String card;
     private double balance;
+    private String brand;  // New field
+    private String issuer; // New field
 
     public User(){
 
     }
 
-public User(String name, String surname, boolean gender, String card, double balance) {
+    public User(String name, String surname, boolean gender, String card, double balance, String brand, String issuer) {
         setName(name);
         setSurname(surname);
         setGender(gender);
         setCard(card);
         setBalance(balance);
-
-
+        setBrand(brand);
+        setIssuer(issuer);
     }
 
-    public User(int id, String name, String surname, boolean gender, String card, double balance) {
-        this(name, surname, gender, card, balance);
+    public User(int id, String name, String surname, boolean gender, String card, double balance, String brand, String issuer) {
+        this(name, surname, gender, card, balance, brand, issuer);
         setId(id);
     }
 
@@ -74,18 +76,37 @@ public User(String name, String surname, boolean gender, String card, double bal
         this.balance = balance;
     }
 
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getIssuer() {
+        return issuer;
+    }
+
+    public void setIssuer(String issuer) {
+        this.issuer = issuer;
+    }
 
 
     @Override
     public String toString() {
-        return "User {\n" +
-                "  id: " + id + ",\n" +
-                "  name: '" + name + "',\n" +
-                "  surname: '" + surname + "',\n" +
-                "  gender: " + (gender ? "Male" : "Female") + ",\n" +
-                "  creditCardNumber: '" + card + "',\n" +
-                "  balance: " + balance + "\n" +
-                "}";
+
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", gender=" + gender + '\n' +
+                ", card='" + card + '\'' +
+                ", balance=" + balance +
+                ", brand='" + brand + '\'' +
+                ", issuer='" + issuer + '\'' +
+                '}';
+
     }
 
 }

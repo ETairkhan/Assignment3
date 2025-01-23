@@ -1,8 +1,12 @@
 import controllers.interfaces.IUserController;
+import issue.IssuerCard;
 import repositories.interfaces.IUserRepository;
+import validate.CardInformation;
 import validate.Validator;
 
 import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class MyApplication {
@@ -22,9 +26,10 @@ public class MyApplication {
         System.out.println("2. Get user by id");
         System.out.println("3. Create new user");
         System.out.println("4. Delete user");
+        System.out.println("5. Generate card number");
         System.out.println("0. Exit");
         System.out.println();
-        System.out.print("Select an option (1-4): ");
+        System.out.print("Select an option (1-5): ");
     }
 
     public void start(){
@@ -37,6 +42,7 @@ public class MyApplication {
                     case 2: getUserByIdMenu(); break;
                     case 3: createUserMenu(); break;
                     case 4: deleteUser(); break;
+                    case 5: generateCardMenu(); break;
                     default:return;
                 }
             }catch (InputMismatchException e){
@@ -93,4 +99,24 @@ public class MyApplication {
         String response = controller.deleteUser(id);
         System.out.println(response);
     }
+
+    private void generateCardMenu() {
+        System.out.println("Please enter the card brand (e.g., VISA, MASTERCARD): ");
+        String brand = scanner.next().trim().toUpperCase(); // Normalize input
+        System.out.println("Please enter the card issuer (e.g., Kaspi Gold, Forte Blue): ");
+        scanner.nextLine(); // Consume newline
+        String issuer = scanner.nextLine().trim(); // Normalize input
+
+        // Load brands and issuers
+        Map<String, List<String>> brands = CardInformation.loadDataAsList("src/resources/brands.txt");
+        Map<String, String> issuers = CardInformation.loadData("src/resources/issuers.txt");
+
+        try {
+            String cardNumber = IssuerCard.generateCardNumber(brands, issuers, brand, issuer);
+            System.out.println("Generated Card Number: " + cardNumber);
+        } catch (RuntimeException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
 }
