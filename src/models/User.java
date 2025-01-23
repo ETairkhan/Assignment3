@@ -95,18 +95,19 @@ public class User {
 
     @Override
     public String toString() {
-
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", gender=" + gender + '\n' +
-                ", card='" + card + '\'' +
-                ", balance=" + balance +
-                ", brand='" + brand + '\'' +
-                ", issuer='" + issuer + '\'' +
-                '}';
-
+        return String.format(
+                "======================= User Details =======================\n" +
+                        "ID:             %-10d\n" +
+                        "Name:           %-20s\n" +
+                        "Surname:        %-20s\n" +
+                        "Gender:         %-10s\n" +
+                        "Card:           %-20s\n" +
+                        "Balance:        $%-10.2f\n" +
+                        "Brand:          %-20s\n" +
+                        "Issuer:         %-20s\n" +
+                        "===========================================================\n",
+                id, name, surname, (gender ? "Male" : "Female"), card, balance, brand, issuer
+        );
     }
 
 }
