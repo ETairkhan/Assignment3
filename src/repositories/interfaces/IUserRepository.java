@@ -9,4 +9,5 @@ public interface IUserRepository {
     User getUserById(int id);
     List<User> getAllUsers();
     boolean deleteUser(int id);
+    boolean updateUserBalance(User user);
 }

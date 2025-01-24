@@ -27,6 +27,7 @@ public class MyApplication {
         System.out.println("3. Create new user");
         System.out.println("4. Delete user");
         System.out.println("5. Generate card number");
+        System.out.println("6. Transfer Money");
         System.out.println("0. Exit");
         System.out.println();
         System.out.print("Select an option (1-5): ");
@@ -43,6 +44,7 @@ public class MyApplication {
                     case 3: createUserMenu(); break;
                     case 4: deleteUser(); break;
                     case 5: generateCardMenu(); break;
+                    case 6: transferMoneyMenu(); break;
                     default:return;
                 }
             }catch (InputMismatchException e){
@@ -66,16 +68,21 @@ public class MyApplication {
         String creditCardNumber = scanner.next();
         if (!Validator.validate(creditCardNumber)) {
             System.out.println("Invalid credit card number. User creation failed.");
-            return; // Exit if validation fails
+            return;
         }
         System.out.println("Please enter balance: ");
-        double balance = scanner.nextDouble();
-
-
-
-
-        String response = controller.createUser(name, surname, gender, creditCardNumber, balance);
-        System.out.println(response);
+        try {
+            double balance = scanner.nextDouble();
+            if (balance < 0){
+                System.out.println("Invalid balance. User creation failed.");
+                return;
+            }
+            String response = controller.createUser(name, surname, gender, creditCardNumber, balance);
+            System.out.println(response);
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input for balance. User creation failed.");
+            scanner.nextLine();
+        }
 
 
     }
@@ -118,5 +125,22 @@ public class MyApplication {
             System.err.println(e.getMessage());
         }
     }
+    private void transferMoneyMenu() {
+        try {
+            System.out.println("Enter Sender ID:");
+            int senderId = scanner.nextInt();
+            System.out.println("Enter Receiver ID:");
+            int receiverId = scanner.nextInt();
+            System.out.println("Enter Amount to Transfer:");
+            double amount = scanner.nextDouble();
+
+            String response = controller.transferMoney(senderId, receiverId, amount);
+            System.out.println(response);
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please try again.");
+            scanner.nextLine(); // Clear input buffer
+        }
+    }
+
 
 }
