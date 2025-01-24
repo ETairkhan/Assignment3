@@ -18,14 +18,14 @@ public class UserController implements IUserController {
     @Override
     public String createUser(String name, String surname, String gender, String card, double balance) {
 
-        if (!Validator.isValidLuhn(card)) { // Validate credit card number
+        if (!Validator.isValidLuhn(card)) {
 
             return "Invalid credit card number. User creation failed.";
         }
 
         boolean male = gender.equalsIgnoreCase("male");
 
-        // Determine the brand and issuer using CardInformation
+
         Map<String, String> brands = CardInformation.loadData("src/resources/brands.txt");
         Map<String, String> issuers = CardInformation.loadData("src/resources/issuers.txt");
 
