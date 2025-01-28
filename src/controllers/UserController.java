@@ -19,7 +19,7 @@ public class UserController implements IUserController {
     public String createUser(String name, String surname, String gender, String card, double balance) {
 
 
-        if (!Validator.isValidLuhn(card) || card.length() != 16) { // проверка на корректность длины карты и алгоритм Луна
+        if (!Validator.isValidLuhn(card) || card.length() != 16) {
             return "Invalid credit card number. User creation failed.";
         }
 
@@ -27,7 +27,6 @@ public class UserController implements IUserController {
         boolean male = gender.equalsIgnoreCase("male");
 
 
-        // Load brands and issuers
 
         Map<String, String> issuers = CardInformation.loadData("src/resources/issuers.txt");
         Map<String, List<String>> brands = CardInformation.loadDataAsList("src/resources/brands.txt");
@@ -35,18 +34,16 @@ public class UserController implements IUserController {
         String brand = "-";
         String issuer = "-";
 
-        // Check for brand
         for (Map.Entry<String, List<String>> entry : brands.entrySet()) {
-            for (String prefix : entry.getValue()) { // Loop through all prefixes for the brand
+            for (String prefix : entry.getValue()) {
                 if (card.startsWith(prefix)) {
                     brand = entry.getKey();
                     break;
                 }
             }
-            if (!brand.equals("-")) break; // Break outer loop if brand is found
+            if (!brand.equals("-")) break;
         }
 
-        // Check for issuer
         for (Map.Entry<String, String> entry : issuers.entrySet()) {
             if (card.startsWith(entry.getKey())) {
                 issuer = entry.getValue();
@@ -65,9 +62,11 @@ public class UserController implements IUserController {
     @Override
     public String getUserById(int id) {
         User user = repo.getUserById(id);
-        return (user == null) ? "User was not found" : user.toString();
+        if (user == null) {
+            return "User with ID " + id + " not found.";
+        }
+        return user.toString();
     }
-
     @Override
     public String getAllUsers() {
         List<User> users = repo.getAllUsers();
@@ -89,7 +88,6 @@ public class UserController implements IUserController {
             return "Invalid transfer amount. Transfer failed.";
         }
 
-        // Fetch sender and receiver details
         User sender = repo.getUserById(senderId);
         User receiver = repo.getUserById(receiverId);
 
