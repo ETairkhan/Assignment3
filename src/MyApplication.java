@@ -30,7 +30,7 @@ public class MyApplication {
         System.out.println("6. Transfer Money");
         System.out.println("0. Exit");
         System.out.println();
-        System.out.print("Select an option (1-5): ");
+        System.out.print("Select an option (1-6): ");
     }
 
     public void start(){
@@ -63,7 +63,11 @@ public class MyApplication {
         System.out.println("Please enter surname: ");
         String surname = scanner.next();
         System.out.println("Please enter gender (male/female): ");
-        String gender = scanner.next();
+        String gender = scanner.next().toLowerCase();
+        if (!gender.equals("male") && !gender.equals("female")){
+            System.out.println("Invalid gender. Please enter 'male' or 'female'");
+            return;
+        }
         System.out.println("Please enter credit card number: ");
         String creditCardNumber = scanner.next();
         if (!Validator.validate(creditCardNumber)) {

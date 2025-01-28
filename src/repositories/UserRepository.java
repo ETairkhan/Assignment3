@@ -24,6 +24,11 @@ public class UserRepository implements IUserRepository {
             return false;
         }
 
+        if (cardExists(user.getCard())) {
+            System.out.println("A user with this credit card number already exists.");
+            return false;
+        }
+
         String sql = "INSERT INTO users(name, surname, gender, card, balance, brand, issuer) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = db.getConnection();
              PreparedStatement st = connection.prepareStatement(sql)) {
@@ -36,13 +41,16 @@ public class UserRepository implements IUserRepository {
             st.setString(6, user.getBrand());
             st.setString(7, user.getIssuer());
 
-            return st.executeUpdate() > 0;
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
 
         } catch (SQLException e) {
             System.err.println("Error while creating user: " + e.getMessage());
         }
         return false;
     }
+
+
 
 
     @Override
@@ -132,5 +140,28 @@ public class UserRepository implements IUserRepository {
         }
         return false;
     }
+
+    public boolean cardExists(String card) {
+        String sql = "SELECT COUNT(*) FROM users WHERE card = ?";
+        try (Connection connection = db.getConnection();
+             PreparedStatement st = connection.prepareStatement(sql)) {
+
+            st.setString(1, card);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Return true if the count is greater than 0
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error while checking credit card: " + e.getMessage());
+        }
+        return false;
+    }
+
+
+
+
+
+
 
 }
