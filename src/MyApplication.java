@@ -60,6 +60,10 @@ public class MyApplication {
     private void createUserMenu() {
         System.out.println("Please enter name: ");
         String name = scanner.next();
+        if (!name.matches("[a-zA-Z]+")) {
+            System.out.println("Invalid name.User creation failed.");
+            return;
+        }
         System.out.println("Please enter surname: ");
         String surname = scanner.next();
         System.out.println("Please enter gender (male/female): ");
