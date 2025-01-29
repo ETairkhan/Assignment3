@@ -66,6 +66,10 @@ public class MyApplication {
         }
         System.out.println("Please enter surname: ");
         String surname = scanner.next();
+        if (!surname.matches("[a-zA-Z]+")) {
+            System.out.println("Invalid surname.User creation failed.");
+            return;
+        }
         System.out.println("Please enter gender (male/female): ");
         String gender = scanner.next().toLowerCase();
         if (!gender.equals("male") && !gender.equals("female")){
