@@ -19,7 +19,7 @@ public class UserController implements IUserController {
     public String createUser(String name, String surname, String gender, String card, double balance) {
 
 
-        if (!Validator.isValidLuhn(card) || card.length() != 16) {
+        if (!Validator.isValidLuhn(card) || card.length() > 19) {
             return "Invalid credit card number. User creation failed.";
         }
 
