@@ -84,6 +84,7 @@ public class UserController implements IUserController {
 
     @Override
     public String transferMoney(int senderId, int receiverId, double amount) {
+
         if (amount <= 0) {
             return "Invalid transfer amount. Transfer failed.";
         }
@@ -102,18 +103,33 @@ public class UserController implements IUserController {
             return "Insufficient balance. Transfer failed.";
         }
 
-        // Perform balance updates
-        sender.setBalance(sender.getBalance() - amount);
+        double fee = sender.calculateTransactionFee(receiver);
+        double totalAmount = amount + fee;
+
+        if (sender.getBalance() < totalAmount) {
+            return "Insufficient balance. Transfer failed.";
+        }
+
+        sender.setBalance(sender.getBalance() - totalAmount);
         receiver.setBalance(receiver.getBalance() + amount);
+
+        sender.addTransaction("Sent " + amount + " KZT to User " + receiverId + " (Fee: " + fee + " KZT)");
+        receiver.addTransaction("Received " + amount + " KZT from User " + senderId);
 
         boolean senderUpdated = repo.updateUserBalance(sender);
         boolean receiverUpdated = repo.updateUserBalance(receiver);
 
         if (senderUpdated && receiverUpdated) {
-            return "Transfer successful. Transferred " + amount + " from User " + senderId + " to User " + receiverId + ".";
+            return "Transfer successful. Transferred " + amount + " KZT from User " + senderId +
+                    " to User " + receiverId + ". Fee: " + fee + " KZT. Total deducted: " + totalAmount + " KZT.";
         } else {
             return "Transfer failed due to a database error.";
         }
+
     }
+
+
+
+
 
 }

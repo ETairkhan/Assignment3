@@ -121,10 +121,10 @@ public class MyApplication {
 
     private void generateCardMenu() {
         System.out.println("Please enter the card brand (e.g., VISA, MASTERCARD): ");
-        String brand = scanner.next().trim().toUpperCase(); // Normalize input
+        String brand = scanner.next().trim().toUpperCase();
         System.out.println("Please enter the card issuer (e.g., Kaspi Gold, Forte Blue): ");
         scanner.nextLine(); // Consume newline
-        String issuer = scanner.nextLine().trim(); // Normalize input
+        String issuer = scanner.nextLine().trim();
 
         // Load brands and issuers
         Map<String, List<String>> brands = CardInformation.loadDataAsList("src/resources/brands.txt");

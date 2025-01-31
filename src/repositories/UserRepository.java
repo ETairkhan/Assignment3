@@ -149,7 +149,7 @@ public class UserRepository implements IUserRepository {
             st.setString(1, card);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                return rs.getInt(1) > 0; // Return true if the count is greater than 0
+                return rs.getInt(1) > 0;
             }
 
         } catch (SQLException e) {
@@ -158,7 +158,40 @@ public class UserRepository implements IUserRepository {
         return false;
     }
 
+    public boolean transferMoney(int senderId, int receiverId, double amount) {
+        User sender = getUserById(senderId);
+        User receiver = getUserById(receiverId);
 
+        if (sender == null || receiver == null) {
+            System.out.println("Error: One or both users not found.");
+            return false;
+        }
+
+        String senderBank = sender.getIssuer();
+        String receiverBank = receiver.getIssuer();
+        double fee = calculateTransactionFee(senderBank, receiverBank);
+        double totalAmount = amount + fee;
+
+        if (sender.getBalance() < totalAmount) {
+            System.out.println("Error: Insufficient balance.");
+            return false;
+        }
+
+        sender.setBalance(sender.getBalance() - totalAmount);
+        updateUserBalance(sender);
+
+        receiver.setBalance(receiver.getBalance() + amount);
+        updateUserBalance(receiver);
+
+        System.out.printf("Transaction Successful! Sent: %.2f KZT, Fee: %.2f KZT, Total Deducted: %.2f KZT%n",
+                amount, fee, totalAmount);
+
+        return true;
+    }
+
+    private double calculateTransactionFee(String senderBank, String receiverBank) {
+        return senderBank.equalsIgnoreCase(receiverBank) ? 0 : 150;
+    }
 
 
 
