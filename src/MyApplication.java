@@ -83,18 +83,25 @@ public class MyApplication {
             return;
         }
         System.out.println("Please enter balance: ");
+        double balance = 0;
         try {
-            double balance = scanner.nextDouble();
+            balance = scanner.nextDouble();
             if (balance < 0){
                 System.out.println("Invalid balance. User creation failed.");
                 return;
             }
-            String response = controller.createUser(name, surname, gender, creditCardNumber, balance);
-            System.out.println(response);
         } catch (InputMismatchException e) {
             System.out.println("Invalid input for balance. User creation failed.");
             scanner.nextLine();
         }
+        System.out.println("Enter role (admin, manager, editor, user): ");
+        String role = scanner.next().toLowerCase();
+        if (!role.matches("admin|manager|editor|user")) {
+            System.out.println("Invalid role. Defaulting to 'user'.");
+            role = "user";
+        }
+        String response = controller.createUser(name, surname, gender, creditCardNumber, balance, role);
+        System.out.println(response);
 
 
     }
@@ -114,8 +121,10 @@ public class MyApplication {
     private void deleteUser() {
         System.out.println("Please enter a user id: ");
         int id = scanner.nextInt();
+        System.out.println("Please enter a user name: ");
+        String name = scanner.next();
 
-        String response = controller.deleteUser(id);
+        String response = controller.deleteUser(id, name);
         System.out.println(response);
     }
 
