@@ -7,14 +7,15 @@ public class User {
     private boolean gender;
     private String card;
     private double balance;
-    private String brand;  // New field
-    private String issuer; // New field
+    private String brand;
+    private String issuer;
+    private String role;
 
     public User(){
 
     }
 
-    public User(String name, String surname, boolean gender, String card, double balance, String brand, String issuer) {
+    public User(String name, String surname, boolean gender, String card, double balance, String brand, String issuer, String role) {
         setName(name);
         setSurname(surname);
         setGender(gender);
@@ -22,10 +23,11 @@ public class User {
         setBalance(balance);
         setBrand(brand);
         setIssuer(issuer);
+        setRole(role);
     }
 
-    public User(int id, String name, String surname, boolean gender, String card, double balance, String brand, String issuer) {
-        this(name, surname, gender, card, balance, brand, issuer);
+    public User(int id, String name, String surname, boolean gender, String card, double balance, String brand, String issuer, String role) {
+        this(name, surname, gender, card, balance, brand, issuer, role);
         setId(id);
     }
 
@@ -92,6 +94,15 @@ public class User {
         this.issuer = issuer;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+
 
     @Override
     public String toString() {
@@ -105,8 +116,9 @@ public class User {
                         "Balance:        $%-10.2f\n" +
                         "Brand:          %-20s\n" +
                         "Issuer:         %-20s\n" +
+                        "Role:           %-10s\n" +
                         "===========================================================\n",
-                id, name, surname, (gender ? "Male" : "Female"), card, balance, brand, issuer
+                id, name, surname, (gender ? "Male" : "Female"), card, balance, brand, issuer, role
         );
     }
 

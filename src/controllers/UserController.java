@@ -16,7 +16,7 @@ public class UserController implements IUserController {
         this.repo = repo;
     }
     @Override
-    public String createUser(String name, String surname, String gender, String card, double balance) {
+    public String createUser(String name, String surname, String gender, String card, double balance, String role) {
 
 
         if (!Validator.isValidLuhn(card) || card.length() > 19) {
@@ -52,7 +52,7 @@ public class UserController implements IUserController {
         }
 
         // Create user object
-        User user = new User(name, surname, male, card, balance, brand, issuer);
+        User user = new User(name, surname, male, card, balance, brand, issuer, role);
         boolean created = repo.createUser(user);
         return (created) ? "User was created" : "User creation failed";
     }
@@ -76,10 +76,21 @@ public class UserController implements IUserController {
         }
         return responce.toString();
     }
+    private boolean hasAccess(User user, String requiredRole) {
+        if (user == null) {
+            return false;
+        }
+        return user.getRole().equalsIgnoreCase(requiredRole) || user.getRole().equalsIgnoreCase("admin");
+    }
+
     @Override
-    public String deleteUser(int id) {
+    public String deleteUser(int id, String adminId) {
+        User admin = repo.getUserById(id);
+        if (!hasAccess(admin, "admin")) {
+            return "Access Denied: Only admins can delete users.";
+        }
         boolean deleted = repo.deleteUser(id);
-        return (deleted) ? "User was successfully deleted." : "User deletion failed. User may not exist.";
+        return (deleted) ? "User successfully deleted." : "User deletion failed.";
     }
 
     @Override
@@ -91,29 +102,29 @@ public class UserController implements IUserController {
         User sender = repo.getUserById(senderId);
         User receiver = repo.getUserById(receiverId);
 
-        if (sender == null) {
-            return "Sender not found. Transfer failed.";
-        }
-        if (receiver == null) {
-            return "Receiver not found. Transfer failed.";
+        if (sender == null || receiver == null) {
+            return "Sender or receiver not found. Transfer failed.";
         }
 
         if (sender.getBalance() < amount) {
             return "Insufficient balance. Transfer failed.";
         }
 
-        // Perform balance updates
+        // Check if sender has privileges (only admins or financial managers)
+        if (!hasAccess(sender, "manager")) {
+            return "Access Denied: Only managers or admins can transfer money.";
+        }
+
         sender.setBalance(sender.getBalance() - amount);
         receiver.setBalance(receiver.getBalance() + amount);
 
         boolean senderUpdated = repo.updateUserBalance(sender);
         boolean receiverUpdated = repo.updateUserBalance(receiver);
 
-        if (senderUpdated && receiverUpdated) {
-            return "Transfer successful. Transferred " + amount + " from User " + senderId + " to User " + receiverId + ".";
-        } else {
-            return "Transfer failed due to a database error.";
-        }
+        return (senderUpdated && receiverUpdated) ?
+                "Transfer successful." :
+                "Transfer failed due to a database error.";
     }
+
 
 }
