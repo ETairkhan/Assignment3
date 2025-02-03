@@ -181,7 +181,7 @@ public class UserRepository implements IUserRepository {
         receiver.setBalance(receiver.getBalance() + amount);
         updateUserBalance(receiver);
 
-        System.out.printf("Transaction Successful! Sent: %.2f KZT, Fee: %.2f KZT, Total Deducted: %.2f KZT%n",
+        System.out.printf("Transaction Successful! Sent: %.2f Dollars, Fee: %.2f Dollars, Total Deducted: %.2f Dollars%n",
                 amount, fee, totalAmount);
 
         return true;
