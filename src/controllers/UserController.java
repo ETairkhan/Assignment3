@@ -16,7 +16,7 @@ public class UserController implements IUserController {
         this.repo = repo;
     }
     @Override
-    public String createUser(String name, String surname, String gender, String card, double balance, String role) {
+    public String createUser(String name, String surname, String gender, String card, double balance) {
 
 
         if (!Validator.isValidLuhn(card) || card.length() > 19) {
@@ -52,7 +52,7 @@ public class UserController implements IUserController {
         }
 
         // Create user object
-        User user = new User(name, surname, male, card, balance, brand, issuer, role);
+        User user = new User(name, surname, male, card, balance, brand, issuer);
         boolean created = repo.createUser(user);
         return (created) ? "User was created" : "User creation failed";
     }
@@ -76,19 +76,9 @@ public class UserController implements IUserController {
         }
         return responce.toString();
     }
-    private boolean hasAccess(User user, String requiredRole) {
-        if (user == null) {
-            return false;
-        }
-        return user.getRole().equalsIgnoreCase(requiredRole) || user.getRole().equalsIgnoreCase("admin");
-    }
 
     @Override
-    public String deleteUser(int id, String adminId) {
-        User admin = repo.getUserById(id);
-        if (!hasAccess(admin, "admin")) {
-            return "Access Denied: Only admins can delete users.";
-        }
+    public String deleteUser(int id) {
         boolean deleted = repo.deleteUser(id);
         return (deleted) ? "User successfully deleted." : "User deletion failed.";
     }
@@ -120,11 +110,6 @@ public class UserController implements IUserController {
         }
 
         sender.setBalance(sender.getBalance() - totalAmount);
-
-        // Check if sender has privileges (only admins or financial managers)
-        if (!hasAccess(sender, "manager")) {
-            return "Access Denied: Only managers or admins can transfer money.";
-        }
 
         sender.setBalance(sender.getBalance() - amount);
         receiver.setBalance(receiver.getBalance() + amount);

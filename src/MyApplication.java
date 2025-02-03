@@ -94,13 +94,7 @@ public class MyApplication {
             System.out.println("Invalid input for balance. User creation failed.");
             scanner.nextLine();
         }
-        System.out.println("Enter role (admin, manager, editor, user): ");
-        String role = scanner.next().toLowerCase();
-        if (!role.matches("admin|manager|editor|user")) {
-            System.out.println("Invalid role. Defaulting to 'user'.");
-            role = "user";
-        }
-        String response = controller.createUser(name, surname, gender, creditCardNumber, balance, role);
+        String response = controller.createUser(name, surname, gender, creditCardNumber, balance);
         System.out.println(response);
 
 
@@ -121,10 +115,8 @@ public class MyApplication {
     private void deleteUser() {
         System.out.println("Please enter a user id: ");
         int id = scanner.nextInt();
-        System.out.println("Please enter a user name: ");
-        String name = scanner.next();
 
-        String response = controller.deleteUser(id, name);
+        String response = controller.deleteUser(id);
         System.out.println(response);
     }
 

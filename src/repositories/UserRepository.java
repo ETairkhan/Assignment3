@@ -29,7 +29,7 @@ public class UserRepository implements IUserRepository {
             return false;
         }
 
-        String sql = "INSERT INTO users(name, surname, gender, card, balance, brand, issuer, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users(name, surname, gender, card, balance, brand, issuer) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = db.getConnection();
              PreparedStatement st = connection.prepareStatement(sql)) {
 
@@ -40,7 +40,6 @@ public class UserRepository implements IUserRepository {
             st.setDouble(5, user.getBalance());
             st.setString(6, user.getBrand());
             st.setString(7, user.getIssuer());
-            st.setString(8, user.getRole());
 
             int rowsAffected = st.executeUpdate();
             return rowsAffected > 0;
@@ -69,8 +68,7 @@ public class UserRepository implements IUserRepository {
                         rs.getString("card"),
                         rs.getDouble("balance"),
                         rs.getString("brand"),
-                        rs.getString("issuer"),
-                        rs.getString("role") // Fetching the role
+                        rs.getString("issuer")
                 );
             }
         } catch (SQLException e) {
@@ -83,7 +81,7 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public List<User> getAllUsers() {
-        String sql = "SELECT id, name, surname, gender, card, balance, brand, issuer, role FROM users";
+        String sql = "SELECT id, name, surname, gender, card, balance, brand, issuer FROM users";
         try (Connection connection = db.getConnection();
              Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -98,8 +96,7 @@ public class UserRepository implements IUserRepository {
                         rs.getString("card"),
                         rs.getDouble("balance"),
                         rs.getString("brand"),
-                        rs.getString("issuer"),
-                        rs.getString("role")
+                        rs.getString("issuer")
                 ));
             }
             return users;
