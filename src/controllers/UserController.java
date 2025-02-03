@@ -114,16 +114,16 @@ public class UserController implements IUserController {
         sender.setBalance(sender.getBalance() - amount);
         receiver.setBalance(receiver.getBalance() + amount);
 
-        sender.addTransaction("Sent " + amount + " KZT to User " + receiverId + " (Fee: " + fee + " KZT)");
-        receiver.addTransaction("Received " + amount + " KZT from User " + senderId);
+        sender.addTransaction("Sent " + amount + " Dollars to User " + receiverId + " (Fee: " + fee + " Dollars)");
+        receiver.addTransaction("Received " + amount + " Dollars from User " + senderId);
 
         boolean senderUpdated = repo.updateUserBalance(sender);
         boolean receiverUpdated = repo.updateUserBalance(receiver);
 
 
         if (senderUpdated && receiverUpdated) {
-            return "Transfer successful. Transferred " + amount + " KZT from User " + senderId +
-                    " to User " + receiverId + ". Fee: " + fee + " KZT. Total deducted: " + totalAmount + " KZT.";
+            return "Transfer successful. Transferred " + amount + " Dollars from User " + senderId +
+                    " to User " + receiverId + ". Fee: " + fee + " Dollars. Total deducted: " + totalAmount + " Dollars.";
         } else {
             return "Transfer failed due to a database error.";
         }
