@@ -107,35 +107,44 @@ public class MyApplication {
     }
 
     private void createUserMenu() {
-        System.out.print("Please enter name: ");
+        System.out.println("Please enter name: ");
         String name = scanner.next();
-
+        if (!name.matches("[a-zA-Z]+")) {
+            System.out.println("Invalid name.User creation failed.");
+            return;
+        }
         System.out.println("Please enter surname: ");
         String surname = scanner.next();
+        if (!surname.matches("[a-zA-Z]+")) {
+            System.out.println("Invalid surname.User creation failed.");
+            return;
+        }
         System.out.println("Please enter gender (male/female): ");
-
         String gender = scanner.next().toLowerCase();
-
-        System.out.print("Please enter credit card number: ");
+        if (!gender.equals("male") && !gender.equals("female")){
+            System.out.println("Invalid gender. Please enter 'male' or 'female'");
+            return;
+        }
+        System.out.println("Please enter credit card number: ");
         String creditCardNumber = scanner.next();
         if (!Validator.validate(creditCardNumber)) {
             System.out.println("Invalid credit card number. User creation failed.");
             return;
         }
-
         System.out.println("Please enter balance: ");
+        double balance = 0;
         try {
-            double balance = scanner.nextDouble();
+            balance = scanner.nextDouble();
             if (balance < 0){
                 System.out.println("Invalid balance. User creation failed.");
                 return;
             }
-            String response = controller.createUser(name, surname, gender, creditCardNumber, balance);
-            System.out.println(response);
         } catch (InputMismatchException e) {
             System.out.println("Invalid input for balance. User creation failed.");
             scanner.nextLine();
         }
+        String response = controller.createUser(name, surname, gender, creditCardNumber, balance);
+        System.out.println(response);
 
 
     }
