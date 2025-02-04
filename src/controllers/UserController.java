@@ -12,37 +12,37 @@ import java.util.List;
 public class UserController implements IUserController {
     private final IUserRepository repo;
 
-    public UserController(IUserRepository repo) {
+    public UserController(IUserRepository repo)  {
         this.repo = repo;
     }
     @Override
     public String createUser(String name, String surname, String gender, String card, double balance) {
 
-        if (!Validator.isValidLuhn(card)) { // Validate credit card number
+        if (!Validator.isValidLuhn(card)) {
             return "Invalid credit card number. User creation failed.";
         }
 
         boolean male = gender.equalsIgnoreCase("male");
 
-        // Load brands and issuers
+
         Map<String, String> issuers = CardInformation.loadData("src/resources/issuers.txt");
         Map<String, List<String>> brands = CardInformation.loadDataAsList("src/resources/brands.txt");
 
         String brand = "-";
         String issuer = "-";
 
-        // Check for brand
+
         for (Map.Entry<String, List<String>> entry : brands.entrySet()) {
-            for (String prefix : entry.getValue()) { // Loop through all prefixes for the brand
+            for (String prefix : entry.getValue()) {
                 if (card.startsWith(prefix)) {
                     brand = entry.getKey();
                     break;
                 }
             }
-            if (!brand.equals("-")) break; // Break outer loop if brand is found
+            if (!brand.equals("-")) break;
         }
 
-        // Check for issuer
+
         for (Map.Entry<String, String> entry : issuers.entrySet()) {
             if (card.startsWith(entry.getKey())) {
                 issuer = entry.getValue();
@@ -50,7 +50,7 @@ public class UserController implements IUserController {
             }
         }
 
-        // Create user object
+
         User user = new User(name, surname, male, card, balance, brand, issuer);
         boolean created = repo.createUser(user);
         return (created) ? "User was created" : "User creation failed";
@@ -85,7 +85,7 @@ public class UserController implements IUserController {
             return "Invalid transfer amount. Transfer failed.";
         }
 
-        // Fetch sender and receiver details
+
         User sender = repo.getUserById(senderId);
         User receiver = repo.getUserById(receiverId);
 
@@ -100,7 +100,7 @@ public class UserController implements IUserController {
             return "Insufficient balance. Transfer failed.";
         }
 
-        // Perform balance updates
+
         sender.setBalance(sender.getBalance() - amount);
         receiver.setBalance(receiver.getBalance() + amount);
 
