@@ -31,9 +31,9 @@ public class UserRepository implements IUserRepository {
             return false;
         }
 
-        String sqlValues = "INSERT INTO users(name, surname, gender, card, balance, brand, issuer) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users(name, surname, gender, card, balance, brand, issuer) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = db.getConnection();
-             PreparedStatement st = connection.prepareStatement(sqlValues)) {
+             PreparedStatement st = connection.prepareStatement(sql)) {
 
             st.setString(1, user.getName());
             st.setString(2, user.getSurname());
