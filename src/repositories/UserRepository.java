@@ -31,9 +31,9 @@ public class UserRepository implements IUserRepository {
             return false;
         }
 
-        String sql = "INSERT INTO users(name, surname, gender, card, balance, brand, issuer) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sqlValues = "INSERT INTO users(name, surname, gender, card, balance, brand, issuer) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = db.getConnection();
-             PreparedStatement st = connection.prepareStatement(sql)) {
+             PreparedStatement st = connection.prepareStatement(sqlValues)) {
 
             st.setString(1, user.getName());
             st.setString(2, user.getSurname());
@@ -83,7 +83,7 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public List<User> getAllUsers() {
-        String sql = "SELECT id, name, surname, gender, card, balance, brand, issuer FROM users";
+        String sql = "SELECT * FROM users";
         try (Connection connection = db.getConnection();
              Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(sql)) {

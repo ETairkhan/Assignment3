@@ -13,20 +13,17 @@ import java.util.List;
 public class UserController implements IUserController {
     private final IUserRepository repo;
 
-    public UserController(IUserRepository repo) {
+    public UserController(IUserRepository repo)  {
         this.repo = repo;
     }
     @Override
     public String createUser(String name, String surname, String gender, String card, double balance) {
 
-
-        if (!Validator.isValidLuhn(card) || card.length() > 19) {
+        if (!Validator.isValidLuhn(card)) {
             return "Invalid credit card number. User creation failed.";
         }
 
-
         boolean male = gender.equalsIgnoreCase("male");
-
 
 
         Map<String, String> issuers = CardInformation.loadData("src/resources/issuers.txt");
@@ -34,6 +31,7 @@ public class UserController implements IUserController {
 
         String brand = "-";
         String issuer = "-";
+
 
         for (Map.Entry<String, List<String>> entry : brands.entrySet()) {
             for (String prefix : entry.getValue()) {
@@ -45,6 +43,7 @@ public class UserController implements IUserController {
             if (!brand.equals("-")) break;
         }
 
+
         for (Map.Entry<String, String> entry : issuers.entrySet()) {
             if (card.startsWith(entry.getKey())) {
                 issuer = entry.getValue();
@@ -52,7 +51,7 @@ public class UserController implements IUserController {
             }
         }
 
-        // Create user object
+
         User user = new User(name, surname, male, card, balance, brand, issuer);
         boolean created = repo.createUser(user);
         return (created) ? "User was created" : "User creation failed";
@@ -63,11 +62,9 @@ public class UserController implements IUserController {
     @Override
     public String getUserById(int id) {
         User user = repo.getUserById(id);
-        if (user == null) {
-            return "User with ID " + id + " not found.";
-        }
-        return user.toString();
+        return (user == null) ? "User was not found" : user.toString();
     }
+
     @Override
     public String getAllUsers() {
         List<User> users = repo.getAllUsers();
@@ -77,16 +74,14 @@ public class UserController implements IUserController {
         }
         return responce.toString();
     }
-
     @Override
     public String deleteUser(int id) {
         boolean deleted = repo.deleteUser(id);
-        return (deleted) ? "User successfully deleted." : "User deletion failed.";
+        return (deleted) ? "User was successfully deleted." : "User deletion failed. User may not exist.";
     }
 
     @Override
     public String transferMoney(int senderId, int receiverId, double amount) {
-
         if (amount <= 0) {
             return "Invalid transfer amount. Transfer failed.";
         }
@@ -94,42 +89,38 @@ public class UserController implements IUserController {
         User sender = repo.getUserById(senderId);
         User receiver = repo.getUserById(receiverId);
 
-        if (sender == null || receiver == null) {
-            return "Sender or receiver not found. Transfer failed.";
+        if (sender == null) {
+            return "Sender not found. Transfer failed.";
+        }
+        if (receiver == null) {
+            return "Receiver not found. Transfer failed.";
         }
 
-        if (sender.getBalance() < amount) {
-            return "Insufficient balance. Transfer failed.";
-        }
+        double commission = 1.0;
+        boolean isDifferentBank = !sender.getIssuer().equalsIgnoreCase(receiver.getIssuer());
 
 
-        double fee = sender.calculateTransactionFee(receiver);
-        double totalAmount = amount + fee;
+        double totalAmount = isDifferentBank ? amount + commission : amount;
 
         if (sender.getBalance() < totalAmount) {
             return "Insufficient balance. Transfer failed.";
         }
 
+
         sender.setBalance(sender.getBalance() - totalAmount);
-
-        sender.setBalance(sender.getBalance() - amount);
         receiver.setBalance(receiver.getBalance() + amount);
-
-        sender.addTransaction("Sent " + amount + " Dollars to User " + receiverId + " (Fee: " + fee + " Dollars)");
-        receiver.addTransaction("Received " + amount + " Dollars from User " + senderId);
 
         boolean senderUpdated = repo.updateUserBalance(sender);
         boolean receiverUpdated = repo.updateUserBalance(receiver);
 
-
         if (senderUpdated && receiverUpdated) {
-            return "Transfer successful. Transferred " + amount + " Dollars from User " + senderId +
-                    " to User " + receiverId + ". Fee: " + fee + " Dollars. Total deducted: " + totalAmount + " Dollars.";
+            return "Transfer successful. Transferred " + amount + " from User " + senderId +
+                    " to User " + receiverId + (isDifferentBank ? " with a $1 commission." : " without commission.");
         } else {
             return "Transfer failed due to a database error.";
         }
-
     }
+
 
     @Override
     public String registerUser(String username, String password, String roleName) {
@@ -161,3 +152,7 @@ public class UserController implements IUserController {
     }
 
 }
+
+
+
+

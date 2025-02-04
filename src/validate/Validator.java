@@ -24,7 +24,7 @@ public class Validator {
     }
 
 
-    // Luhn algorithm for credit card validation
+
     public static boolean isValidLuhn(String card) {
         if (card == null || card.isEmpty() || !card.matches("\\d+")) {
             return false;
@@ -47,7 +47,7 @@ public class Validator {
         return sum % 10 == 0;
     }
 
-    // Validate data in a map structure
+
     public static void validateData(Map<String, String> data, String fileType) {
         if (data == null || data.isEmpty()) {
             System.out.printf("Error: %s file is empty or null.%n", fileType);

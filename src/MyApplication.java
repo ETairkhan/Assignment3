@@ -109,9 +109,11 @@ public class MyApplication {
     private void createUserMenu() {
         System.out.print("Please enter name: ");
         String name = scanner.next();
-        System.out.print("Please enter surname: ");
+
+        System.out.println("Please enter surname: ");
         String surname = scanner.next();
-        System.out.print("Please enter gender (male/female): ");
+        System.out.println("Please enter gender (male/female): ");
+
         String gender = scanner.next().toLowerCase();
 
         System.out.print("Please enter credit card number: ");
@@ -121,11 +123,21 @@ public class MyApplication {
             return;
         }
 
-        System.out.print("Please enter balance: ");
-        double balance = scanner.nextDouble();
+        System.out.println("Please enter balance: ");
+        try {
+            double balance = scanner.nextDouble();
+            if (balance < 0){
+                System.out.println("Invalid balance. User creation failed.");
+                return;
+            }
+            String response = controller.createUser(name, surname, gender, creditCardNumber, balance);
+            System.out.println(response);
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input for balance. User creation failed.");
+            scanner.nextLine();
+        }
 
-        String response = controller.createUser(name, surname, gender, creditCardNumber, balance);
-        System.out.println(response);
+
     }
 
     private void getUserByIdMenu() {
@@ -148,11 +160,13 @@ public class MyApplication {
     }
 
     private void generateCardMenu() {
-        System.out.print("Please enter the card brand (e.g., VISA, MASTERCARD): ");
-        String brand = scanner.next().trim().toUpperCase();
-        System.out.print("Please enter the card issuer (e.g., Kaspi Gold, Forte Blue): ");
-        scanner.nextLine();
-        String issuer = scanner.nextLine().trim();
+
+        System.out.println("Please enter the card brand (e.g., VISA, MASTERCARD): ");
+        String brand = scanner.next().trim().toUpperCase(); // Normalize input
+        System.out.println("Please enter the card issuer (e.g., Kaspi Gold, Forte Blue): ");
+        scanner.nextLine(); // Consume newline
+        String issuer = scanner.nextLine().trim(); // Normalize input
+
 
         Map<String, List<String>> brands = CardInformation.loadDataAsList("src/resources/brands.txt");
         Map<String, String> issuers = CardInformation.loadData("src/resources/issuers.txt");

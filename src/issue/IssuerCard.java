@@ -12,13 +12,13 @@ public class IssuerCard {
         brand = brand.trim();
         issuer = issuer.trim();
 
-        // Validate brand
+
         List<String> brandPrefixes = brands.get(brand);
         if (brandPrefixes == null) {
             throw new IllegalArgumentException("Error: Brand not found in the provided data.");
         }
 
-        // Validate issuer
+
         String issuerPrefix = "";
         for (Map.Entry<String, String> entry : issuers.entrySet()) {
             if (entry.getValue().equals(issuer)) {
@@ -34,7 +34,7 @@ public class IssuerCard {
         }
 
 
-        // Check if the issuer prefix matches any of the brand prefixes
+
         boolean validPrefix = false;
         for (String brandPrefix : brandPrefixes) {
             if (issuerPrefix.startsWith(brandPrefix)) {
@@ -51,7 +51,7 @@ public class IssuerCard {
         }
 
 
-        // Generate a valid Luhn number
+
         Random random = new Random();
         int maxAttempts = 10000;
 
@@ -61,7 +61,6 @@ public class IssuerCard {
                 number.append(random.nextInt(10));
             }
 
-            // Validate using Luhn algorithm
             if (Validator.isValidLuhn(number.toString())) {
                 return number.toString();
             }
