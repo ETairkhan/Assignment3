@@ -113,12 +113,12 @@ public class MyApplication {
 
     private void generateCardMenu() {
         System.out.println("Please enter the card brand (e.g., VISA, MASTERCARD): ");
-        String brand = scanner.next().trim().toUpperCase();
+        String brand = scanner.next().trim().toUpperCase(); // Normalize input
         System.out.println("Please enter the card issuer (e.g., Kaspi Gold, Forte Blue): ");
-        scanner.nextLine();
-        String issuer = scanner.nextLine().trim();
+        scanner.nextLine(); // Consume newline
+        String issuer = scanner.nextLine().trim(); // Normalize input
 
-
+        // Load brands and issuers
         Map<String, List<String>> brands = CardInformation.loadDataAsList("src/resources/brands.txt");
         Map<String, String> issuers = CardInformation.loadData("src/resources/issuers.txt");
 
@@ -142,7 +142,7 @@ public class MyApplication {
             System.out.println(response);
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please try again.");
-            scanner.nextLine();
+            scanner.nextLine(); // Clear input buffer
         }
     }
 

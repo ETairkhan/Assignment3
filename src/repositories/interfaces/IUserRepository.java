@@ -10,6 +10,8 @@ public interface IUserRepository {
     List<User> getAllUsers();
     boolean deleteUser(int id);
     boolean updateUserBalance(User user);
+    boolean transferMoney(int senderId, int receiverId, double amount);
+
 
 
 }

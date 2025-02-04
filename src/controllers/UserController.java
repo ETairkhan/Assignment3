@@ -85,7 +85,6 @@ public class UserController implements IUserController {
             return "Invalid transfer amount. Transfer failed.";
         }
 
-
         User sender = repo.getUserById(senderId);
         User receiver = repo.getUserById(receiverId);
 
@@ -96,22 +95,30 @@ public class UserController implements IUserController {
             return "Receiver not found. Transfer failed.";
         }
 
-        if (sender.getBalance() < amount) {
+        double commission = 1.0;
+        boolean isDifferentBank = !sender.getIssuer().equalsIgnoreCase(receiver.getIssuer());
+
+
+        double totalAmount = isDifferentBank ? amount + commission : amount;
+
+        if (sender.getBalance() < totalAmount) {
             return "Insufficient balance. Transfer failed.";
         }
 
 
-        sender.setBalance(sender.getBalance() - amount);
+        sender.setBalance(sender.getBalance() - totalAmount);
         receiver.setBalance(receiver.getBalance() + amount);
 
         boolean senderUpdated = repo.updateUserBalance(sender);
         boolean receiverUpdated = repo.updateUserBalance(receiver);
 
         if (senderUpdated && receiverUpdated) {
-            return "Transfer successful. Transferred " + amount + " from User " + senderId + " to User " + receiverId + ".";
+            return "Transfer successful. Transferred " + amount + " from User " + senderId +
+                    " to User " + receiverId + (isDifferentBank ? " with a $1 commission." : " without commission.");
         } else {
             return "Transfer failed due to a database error.";
         }
     }
+
 
 }

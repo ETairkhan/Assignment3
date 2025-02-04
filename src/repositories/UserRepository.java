@@ -50,9 +50,6 @@ public class UserRepository implements IUserRepository {
         return false;
     }
 
-
-
-
     @Override
     public User getUserById(int id) {
         String sql = "SELECT * FROM users WHERE id = ?";
@@ -79,6 +76,7 @@ public class UserRepository implements IUserRepository {
         }
         return null;
     }
+
 
 
     @Override
@@ -158,7 +156,40 @@ public class UserRepository implements IUserRepository {
         return false;
     }
 
+    public boolean transferMoney(int senderId, int receiverId, double amount) {
+        User sender = getUserById(senderId);
+        User receiver = getUserById(receiverId);
 
+        if (sender == null || receiver == null) {
+            System.out.println("Error: One or both users not found.");
+            return false;
+        }
+
+        String senderBank = sender.getIssuer();
+        String receiverBank = receiver.getIssuer();
+        double fee = calculateTransactionFee(senderBank, receiverBank);
+        double totalAmount = amount + fee;
+
+        if (sender.getBalance() < totalAmount) {
+            System.out.println("Error: Insufficient balance.");
+            return false;
+        }
+
+        sender.setBalance(sender.getBalance() - totalAmount);
+        updateUserBalance(sender);
+
+        receiver.setBalance(receiver.getBalance() + amount);
+        updateUserBalance(receiver);
+
+        System.out.printf("Transaction Successful! Sent: %.2f Dollars, Fee: %.2f Dollars, Total Deducted: %.2f Dollars%n",
+                amount, fee, totalAmount);
+
+        return true;
+    }
+
+    private double calculateTransactionFee(String senderBank, String receiverBank) {
+        return senderBank.equalsIgnoreCase(receiverBank) ? 0 : 150;
+    }
 
 
 

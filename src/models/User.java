@@ -1,4 +1,7 @@
 package models;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class User {
     private int id;
@@ -8,9 +11,12 @@ public class User {
     private String card;
     private double balance;
     private String brand;  // New field
-    private String issuer; // New field
+    private String issuer;
+    private List<String> transactions;
+
 
     public User(){
+        transactions = new ArrayList<>();
 
     }
 
@@ -22,6 +28,8 @@ public class User {
         setBalance(balance);
         setBrand(brand);
         setIssuer(issuer);
+        transactions = new ArrayList<>();
+
     }
 
     public User(int id, String name, String surname, boolean gender, String card, double balance, String brand, String issuer) {
@@ -91,6 +99,20 @@ public class User {
     public void setIssuer(String issuer) {
         this.issuer = issuer;
     }
+
+
+    public List<String> getTransactions() {
+        return transactions;
+    }
+
+    public void addTransaction(String transaction) {
+        transactions.add(transaction);
+    }
+
+    public double calculateTransactionFee(User receiver) {
+        return this.issuer.equalsIgnoreCase(receiver.getIssuer()) ? 0 : 150;
+    }
+
 
 
     @Override
