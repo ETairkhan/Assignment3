@@ -2,6 +2,8 @@ package repositories;
 
 import data.interfaceces.IDB;
 import models.User;
+import models.Role;
+import models.AuthUser;
 import repositories.interfaces.IUserRepository;
 import validate.Validator;
 
@@ -191,6 +193,76 @@ public class UserRepository implements IUserRepository {
         return senderBank.equalsIgnoreCase(receiverBank) ? 0 : 150;
     }
 
+    @Override
+    public boolean registerUser(String username, String password, String roleId) {
+        String sql = "INSERT INTO auth_users (username, password, role_id) VALUES (?, ?, ?)";
+
+        try (Connection connection = db.getConnection();
+             PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, username);
+            st.setString(2, password);  // Store plain password
+            st.setString(3, roleId);  // Directly store role as String
+            return st.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error registering user: " + e.getMessage());
+        }
+        return false;
+    }
+
+    @Override
+    public AuthUser authenticateUser(String username, String password) {
+        String sql = "SELECT id, username, password, role_id FROM auth_users " +
+                "WHERE LOWER(username) = LOWER(?) AND password = ?";
+
+        try (Connection connection = db.getConnection();
+             PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, username);
+            st.setString(2, password);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                Role role = new Role(rs.getString("role_id"), rs.getString("role_id")); // Use role_id directly
+                return new AuthUser(rs.getInt("id"), rs.getString("username"), rs.getString("password"), role);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error authenticating user: " + e.getMessage());
+        }
+        return null;
+    }
+
+
+
+    @Override
+    public String getRoleIdByName(String roleName) {
+        // Directly return role name since we don't have a roles table
+        if (roleName.equalsIgnoreCase("admin") || roleName.equalsIgnoreCase("user")) {
+            return roleName.toLowerCase(); // Normalize to lowercase
+        }
+        return null; // Return null if role is invalid
+    }
+
+
+
+
+    @Override
+    public AuthUser getLoggedInUser(String username) {
+        String sql = "SELECT id, username, password, role_id FROM auth_users " +
+                "WHERE LOWER(username) = LOWER(?)";
+
+        try (Connection connection = db.getConnection();
+             PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, username);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                Role role = new Role(rs.getString("role_id"), rs.getString("role_id")); // Use role_id directly
+                return new AuthUser(rs.getInt("id"), rs.getString("username"), rs.getString("password"), role);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching logged-in user: " + e.getMessage());
+        }
+        return null;
+    }
 
 
 

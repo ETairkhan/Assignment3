@@ -1,6 +1,7 @@
 package controllers;
 
 import controllers.interfaces.IUserController;
+import models.AuthUser;
 import models.User;
 import repositories.interfaces.IUserRepository;
 import validate.Validator;
@@ -129,4 +130,34 @@ public class UserController implements IUserController {
         }
 
     }
+
+    @Override
+    public String registerUser(String username, String password, String roleName) {
+        roleName = roleName.trim().toLowerCase(); // Normalize input
+        String roleId = repo.getRoleIdByName(roleName); // Get role as String
+
+        if (roleId == null) {
+            return "Invalid role. Choose 'admin' or 'user'.";
+        }
+
+        boolean success = repo.registerUser(username, password, roleId);
+        return success ? "User registered successfully!" : "User registration failed.";
+    }
+
+
+
+    @Override
+    public String loginUser(String username, String password) {
+        AuthUser user = repo.authenticateUser(username, password);
+        if (user == null) {
+            return "Invalid username or password.";
+        }
+        return "Login successful! Welcome " + user.getUsername() + ", Role: " + user.getRole().getName();
+    }
+
+    @Override
+    public AuthUser getLoggedInUser(String username) {
+        return repo.getLoggedInUser(username);
+    }
+
 }
