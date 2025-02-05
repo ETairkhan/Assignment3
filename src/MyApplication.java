@@ -188,13 +188,53 @@ public class MyApplication {
         }
     }
 
+    private int getValidIntegerInput(String message) {
+        System.out.print(message + " ");
+
+        while (true) {
+            String input = scanner.nextLine().trim();
+
+            if (!input.isEmpty()) {
+                try {
+                    return Integer.parseInt(input);
+                } catch (NumberFormatException e) {
+                    System.out.print("Invalid input. Please enter a valid number: ");
+                }
+            } else {
+                System.out.print("");
+            }
+        }
+    }
+
+
+
+
+    private double getValidDoubleInput(String message) {
+        System.out.print(message + " ");
+
+        while (true) {
+            String input = scanner.nextLine().trim();
+
+            if (!input.isEmpty()) {
+                try {
+                    return Double.parseDouble(input);
+                } catch (NumberFormatException e) {
+                    System.out.print("Invalid input. Please enter a valid number: ");
+                }
+            } else {
+                System.out.print("");
+            }
+        }
+    }
+
+
+
+
+
     private void transferMoneyMenu() {
-        System.out.print("Enter Sender ID: ");
-        int senderId = scanner.nextInt();
-        System.out.print("Enter Receiver ID: ");
-        int receiverId = scanner.nextInt();
-        System.out.print("Enter Amount to Transfer: ");
-        double amount = scanner.nextDouble();
+        int senderId = getValidIntegerInput("Enter Sender ID:");
+        int receiverId = getValidIntegerInput("Enter Receiver ID:");
+        double amount = getValidDoubleInput("Enter Amount to Transfer:");
 
         String response = controller.transferMoney(senderId, receiverId, amount);
         System.out.println(response);
