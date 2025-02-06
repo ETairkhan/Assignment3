@@ -86,8 +86,8 @@ public class MyApplication {
             System.out.println("6. Transfer Money");
             System.out.println("0. Logout");
 
-            System.out.print("Select an option (0-6): ");
-            int option = getValidIntegerInput();
+
+            int option = getValidIntegerInput("Select an option (0-6): ");
 
             switch (option) {
                 case 1 -> getAllUsersMenu();
@@ -150,8 +150,7 @@ public class MyApplication {
     }
 
     private void getUserByIdMenu() {
-        System.out.print("Please enter a user ID: ");
-        int id = scanner.nextInt();
+        int id = getValidIntegerInput("Please enter a valid user ID: ");
         String response = controller.getUserById(id);
         System.out.println(response);
     }
@@ -162,8 +161,7 @@ public class MyApplication {
     }
 
     private void deleteUser() {
-        System.out.print("Please enter a user ID: ");
-        int id = scanner.nextInt();
+        int id = getValidIntegerInput("Please enter a user ID: ");
         String response = controller.deleteUser(id);
         System.out.println(response);
     }
@@ -201,8 +199,16 @@ public class MyApplication {
 
 
     private int getValidIntegerInput(String message) {
-        System.out.print(message);
-        return getValidIntegerInput();
+        while (true) {
+            System.out.print(message);
+            String input = scanner.nextLine().trim();
+
+            try {
+                return Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number.");
+            }
+        }
     }
 
 
