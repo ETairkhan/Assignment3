@@ -114,46 +114,49 @@ public class MyApplication {
         Predicate<String> genderValidator = input -> input.equalsIgnoreCase("male") || input.equalsIgnoreCase("female");
 
         System.out.println("Please enter name: ");
-        String name = scanner.next();
+        String name = scanner.nextLine().trim();
         if (!nameValidator.test(name)) {
-            System.out.println("Invalid name.User creation failed.");
+            System.out.println("Invalid name. User creation failed.");
             return;
         }
+
         System.out.println("Please enter surname: ");
-        String surname = scanner.next();
+        String surname = scanner.nextLine().trim();
         if (!nameValidator.test(surname)) {
-            System.out.println("Invalid surname.User creation failed.");
+            System.out.println("Invalid surname. User creation failed.");
             return;
         }
+
         System.out.println("Please enter gender (male/female): ");
-        String gender = scanner.next().toLowerCase();
+        String gender = scanner.nextLine().trim().toLowerCase();
         if (!genderValidator.test(gender)){
-            System.out.println("Invalid gender. Please enter 'male' or 'female'");
+            System.out.println("Invalid gender. Please enter 'male' or 'female'.");
             return;
         }
+
         System.out.println("Please enter credit card number: ");
-        String creditCardNumber = scanner.next();
+        String creditCardNumber = scanner.nextLine().trim();
         if (!Validator.validate(creditCardNumber)) {
             System.out.println("Invalid credit card number. User creation failed.");
             return;
         }
+
         System.out.println("Please enter balance: ");
         double balance = 0;
         try {
-            balance = scanner.nextDouble();
+            balance = Double.parseDouble(scanner.nextLine().trim());
             if (balance < 0){
                 System.out.println("Invalid balance. User creation failed.");
                 return;
             }
-        } catch (InputMismatchException e) {
+        } catch (NumberFormatException e) {
             System.out.println("Invalid input for balance. User creation failed.");
-            scanner.nextLine();
         }
+
         String response = controller.createUser(name, surname, gender, creditCardNumber, balance);
         System.out.println(response);
-
-
     }
+
 
     private void getUserByIdMenu() {
         int id = getValidIntegerInput("Please enter a valid user ID: ");
