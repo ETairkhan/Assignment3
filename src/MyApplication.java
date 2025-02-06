@@ -11,6 +11,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.function.Predicate;
 
 public class MyApplication {
     private final IUserController controller;
@@ -108,21 +109,25 @@ public class MyApplication {
     }
 
     private void createUserMenu() {
+
+        Predicate<String> nameValidator = input -> input.matches("[a-zA-Z]+");
+        Predicate<String> genderValidator = input -> input.equalsIgnoreCase("male") || input.equalsIgnoreCase("female");
+
         System.out.println("Please enter name: ");
         String name = scanner.next();
-        if (!name.matches("[a-zA-Z]+")) {
+        if (!nameValidator.test(name)) {
             System.out.println("Invalid name.User creation failed.");
             return;
         }
         System.out.println("Please enter surname: ");
         String surname = scanner.next();
-        if (!surname.matches("[a-zA-Z]+")) {
+        if (!nameValidator.test(surname)) {
             System.out.println("Invalid surname.User creation failed.");
             return;
         }
         System.out.println("Please enter gender (male/female): ");
         String gender = scanner.next().toLowerCase();
-        if (!gender.equals("male") && !gender.equals("female")){
+        if (!genderValidator.test(gender)){
             System.out.println("Invalid gender. Please enter 'male' or 'female'");
             return;
         }
