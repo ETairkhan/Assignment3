@@ -80,36 +80,66 @@ public class MyApplication {
             System.out.println();
             System.out.println("Welcome, " + currentUser.getUsername() + " (" + currentUser.getRole().getName() + ")");
             System.out.println("Select one of the following options:");
-            System.out.println("1. Get all users");
-            System.out.println("2. Get user by ID");
-            System.out.println("3. Create new user");
-            System.out.println("4. Delete user");
-            System.out.println("5. Generate card number");
-            System.out.println("6. Transfer Money");
-            System.out.println("7. Get Users with Auth Details");
-            System.out.println("0. Logout");
 
+            // Check the role and display options accordingly
+            if (currentUser.getRole().getName().equalsIgnoreCase("admin")) {
+                // Admin can do everything
+                System.out.println("1. Get all users");
+                System.out.println("2. Get user by ID");
+                System.out.println("3. Create new user");
+                System.out.println("4. Delete user");
+                System.out.println("5. Generate card number");
+                System.out.println("6. Transfer Money");
+                System.out.println("7. Get Users with Auth Details");
+                System.out.println("0. Logout");
+            } else if (currentUser.getRole().getName().equalsIgnoreCase("user")) {
+                // Regular user has limited access
+                System.out.println("1. Get all users");
+                System.out.println("2. Get user by ID");
+                System.out.println("3. Transfer Money");
+                System.out.println("0. Logout");
+            } else {
+                System.out.println("Invalid role detected. Logging out...");
+                currentUser = null;
+                return;
+            }
 
-            int option = getValidIntegerInput("Select an option (0-6): ");
+            int option = getValidIntegerInput("Select an option: ");
 
-            switch (option) {
-                case 1 -> getAllUsersMenu();
-                case 2 -> getUserByIdMenu();
-                case 3 -> createUserMenu();
-                case 4 -> deleteUser();
-                case 5 -> generateCardMenu();
-                case 6 -> transferMoneyMenu();
-                case 7 -> getUsersWithAuthDetailsMenu();
-
-                case 0 -> {
-                    System.out.println("Logging out...");
-                    currentUser = null;
-                    return;
+            if (currentUser.getRole().getName().equalsIgnoreCase("admin")) {
+                // Admin has access to all options
+                switch (option) {
+                    case 1 -> getAllUsersMenu();
+                    case 2 -> getUserByIdMenu();
+                    case 3 -> createUserMenu();
+                    case 4 -> deleteUser();
+                    case 5 -> generateCardMenu();
+                    case 6 -> transferMoneyMenu();
+                    case 7 -> getUsersWithAuthDetailsMenu();
+                    case 0 -> {
+                        System.out.println("Logging out...");
+                        currentUser = null;
+                        return;
+                    }
+                    default -> System.out.println("Invalid option. Try again.");
                 }
-                default -> System.out.println("Invalid option. Try again.");
+            } else if (currentUser.getRole().getName().equalsIgnoreCase("user")) {
+                // Regular user can only access limited options
+                switch (option) {
+                    case 1 -> getAllUsersMenu();
+                    case 2 -> getUserByIdMenu();
+                    case 3 -> transferMoneyMenu();
+                    case 0 -> {
+                        System.out.println("Logging out...");
+                        currentUser = null;
+                        return;
+                    }
+                    default -> System.out.println("Invalid option. Try again.");
+                }
             }
         }
     }
+
 
     private void createUserMenu() {
 
