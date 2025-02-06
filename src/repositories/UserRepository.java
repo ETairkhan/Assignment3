@@ -269,16 +269,14 @@ public class UserRepository implements IUserRepository {
         String sql = "SELECT u.id AS user_id, u.name, u.surname, u.gender, u.card, u.balance, u.brand, u.issuer, " +
                 "au.username, au.role_id " +
                 "FROM users u " +
-                "JOIN auth_users au ON u.name = au.username";  // Ensure correct relationship
+                "JOIN auth_users au ON u.name = au.username";  // Joining on name and username
 
         try (Connection connection = db.getConnection();
              PreparedStatement st = connection.prepareStatement(sql);
              ResultSet rs = st.executeQuery()) {
 
             List<User> usersWithAuth = new ArrayList<>();
-            int count = 0;  // Counter to limit results to 4
-
-            while (rs.next() && count < 4) {  // Limit output to 4
+            while (rs.next()) {
                 User user = new User(
                         rs.getInt("user_id"),
                         rs.getString("name"),
@@ -294,7 +292,6 @@ public class UserRepository implements IUserRepository {
                 String username = rs.getString("username");
                 String roleId = rs.getString("role_id");
 
-                // Display user with auth details
                 System.out.println("======================= User Details =======================");
                 System.out.printf("ID:             %-10d%n", user.getId());
                 System.out.printf("Name:           %-20s%n", user.getName());
@@ -309,9 +306,7 @@ public class UserRepository implements IUserRepository {
                 System.out.println("===========================================================");
 
                 usersWithAuth.add(user);
-                count++;  // Increment counter
             }
-
             return usersWithAuth;
 
         } catch (SQLException e) {
@@ -319,9 +314,5 @@ public class UserRepository implements IUserRepository {
         }
         return Collections.emptyList();
     }
-
-
-
-
 
 }
