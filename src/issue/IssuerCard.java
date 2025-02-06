@@ -20,12 +20,14 @@ public class IssuerCard {
 
 
         String issuerPrefix = "";
+        String issuerLower = issuer.toLowerCase();
         for (Map.Entry<String, String> entry : issuers.entrySet()) {
-            if (entry.getValue().equals(issuer)) {
+            if (entry.getValue().toLowerCase().equals(issuerLower)) {
                 issuerPrefix = entry.getKey();
                 break;
             }
         }
+
 
 
         if (issuerPrefix.isEmpty()) {

@@ -13,7 +13,7 @@ public class CardInformation {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(":");
                 if (parts.length == 2) {
-                    data.put(parts[1], parts[0]);
+                    data.put(parts[1].toLowerCase(), parts[0]);
                 }
             }
         } catch (IOException e) {
@@ -42,7 +42,7 @@ public class CardInformation {
                 return;
             }
 
-            // Determine the brand
+
             String brandResult = "-";
             for (Map.Entry<String, String> entry : brands.entrySet()) {
                 if (card.startsWith(entry.getKey())) {
@@ -52,7 +52,7 @@ public class CardInformation {
             }
             System.out.println("Card Brand: " + brandResult);
 
-            // Determine the issuer
+
             String issuerResult = "-";
             for (Map.Entry<String, String> entry : issuers.entrySet()) {
                 if (card.startsWith(entry.getKey())) {
