@@ -6,3 +6,10 @@ Kaspi Gold:440043
 JSC KASPI BANK:516948
 AMEX BANK:340503
 UnionPay Gold:621598
+Bank RBK:426643
+Altyn Bank:431705
+Eurasian Bank:440222
+ATF Bank:405711
+Sberbank:546966
+CenterCredit:431765
+Freedom Finance:489049
