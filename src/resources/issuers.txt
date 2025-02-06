@@ -13,3 +13,9 @@ ATF Bank:405711
 Sberbank:546966
 CenterCredit:431765
 Freedom Finance:489049
+MIR Classic:220070
+MIR Premium:220400
+Discover It:601100
+Discover Miles:622126
+JCB Standard:352800
+JCB Gold:353011
