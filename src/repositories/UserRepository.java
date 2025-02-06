@@ -264,6 +264,63 @@ public class UserRepository implements IUserRepository {
         return null;
     }
 
+    @Override
+    public List<User> getUsersWithAuthDetails() {
+        String sql = "SELECT u.id AS user_id, u.name, u.surname, u.gender, u.card, u.balance, u.brand, u.issuer, " +
+                "au.username, au.role_id " +
+                "FROM users u " +
+                "JOIN auth_users au ON u.name = au.username";  // Ensure correct relationship
+
+        try (Connection connection = db.getConnection();
+             PreparedStatement st = connection.prepareStatement(sql);
+             ResultSet rs = st.executeQuery()) {
+
+            List<User> usersWithAuth = new ArrayList<>();
+            int count = 0;  // Counter to limit results to 4
+
+            while (rs.next() && count < 4) {  // Limit output to 4
+                User user = new User(
+                        rs.getInt("user_id"),
+                        rs.getString("name"),
+                        rs.getString("surname"),
+                        rs.getBoolean("gender"),
+                        rs.getString("card"),
+                        rs.getDouble("balance"),
+                        rs.getString("brand"),
+                        rs.getString("issuer")
+                );
+
+                // Fetch auth-related info
+                String username = rs.getString("username");
+                String roleId = rs.getString("role_id");
+
+                // Display user with auth details
+                System.out.println("======================= User Details =======================");
+                System.out.printf("ID:             %-10d%n", user.getId());
+                System.out.printf("Name:           %-20s%n", user.getName());
+                System.out.printf("Username:       %-20s%n", username);
+                System.out.printf("Role ID:        %-10s%n", roleId);
+                System.out.printf("Surname:        %-20s%n", user.getSurname());
+                System.out.printf("Gender:         %-10s%n", user.getGender() ? "Male" : "Female");
+                System.out.printf("Card:           %-20s%n", user.getCard());
+                System.out.printf("Balance:        $%-10.2f%n", user.getBalance());
+                System.out.printf("Brand:          %-20s%n", user.getBrand());
+                System.out.printf("Issuer:         %-20s%n", user.getIssuer());
+                System.out.println("===========================================================");
+
+                usersWithAuth.add(user);
+                count++;  // Increment counter
+            }
+
+            return usersWithAuth;
+
+        } catch (SQLException e) {
+            System.err.println("Error while fetching users with auth details: " + e.getMessage());
+        }
+        return Collections.emptyList();
+    }
+
+
 
 
 

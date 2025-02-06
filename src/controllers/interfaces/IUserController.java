@@ -1,5 +1,8 @@
 package controllers.interfaces;
 import models.AuthUser;
+import models.User;
+
+import java.util.List;
 
 public interface IUserController {
     String createUser(String name, String surname, String gender, String card, double balance);
@@ -10,5 +13,6 @@ public interface IUserController {
     String registerUser(String username, String password, String role);
     String loginUser(String username, String password);
     AuthUser getLoggedInUser(String username);
+    String getUsersWithAuthDetails();
 
 }

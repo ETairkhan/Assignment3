@@ -16,7 +16,7 @@ public interface IUserRepository {
     AuthUser authenticateUser(String username, String password);
     String getRoleIdByName(String roleName);
     AuthUser getLoggedInUser(String username);
-
+    List<User> getUsersWithAuthDetails();
 
 
 }

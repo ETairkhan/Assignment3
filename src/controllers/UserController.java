@@ -151,6 +151,21 @@ public class UserController implements IUserController {
         return repo.getLoggedInUser(username);
     }
 
+    @Override
+    public String getUsersWithAuthDetails() {
+        List<User> users = repo.getUsersWithAuthDetails();
+        if (users.isEmpty()) {
+            return "No users found with auth details.";
+        }
+
+        StringBuilder response = new StringBuilder();
+        for (User user : users) {
+            response.append(user.toString()).append("\n");
+        }
+        return response.toString();
+    }
+
+
 }
 
 

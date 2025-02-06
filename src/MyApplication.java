@@ -86,6 +86,7 @@ public class MyApplication {
             System.out.println("4. Delete user");
             System.out.println("5. Generate card number");
             System.out.println("6. Transfer Money");
+            System.out.println("7. Get Users with Auth Details");
             System.out.println("0. Logout");
 
 
@@ -98,6 +99,8 @@ public class MyApplication {
                 case 4 -> deleteUser();
                 case 5 -> generateCardMenu();
                 case 6 -> transferMoneyMenu();
+                case 7 -> getUsersWithAuthDetailsMenu();
+
                 case 0 -> {
                     System.out.println("Logging out...");
                     currentUser = null;
@@ -233,10 +236,6 @@ public class MyApplication {
         }
     }
 
-
-
-
-
     private void transferMoneyMenu() {
         int senderId = getValidIntegerInput("Enter Sender ID:");
         int receiverId = getValidIntegerInput("Enter Receiver ID:");
@@ -245,4 +244,10 @@ public class MyApplication {
         String response = controller.transferMoney(senderId, receiverId, amount);
         System.out.println(response);
     }
+
+    private void getUsersWithAuthDetailsMenu() {
+        String response = controller.getUsersWithAuthDetails();
+        System.out.println(response);
+    }
+
 }
