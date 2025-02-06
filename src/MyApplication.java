@@ -4,7 +4,7 @@ import repositories.interfaces.IUserRepository;
 import validate.CardInformation;
 import validate.Validator;
 import models.Role;
-import models.AuthUser; // New class for authentication
+import models.AuthUser;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.Scanner;
 public class MyApplication {
     private final IUserController controller;
     private final Scanner scanner = new Scanner(System.in);
-    private AuthUser currentUser = null; // Track logged-in user
+    private AuthUser currentUser = null;
 
     public MyApplication(IUserController controller) {
         this.controller = controller;
@@ -27,8 +27,8 @@ public class MyApplication {
             System.out.println("3. Exit");
             System.out.print("Choose an option: ");
 
-            int option = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            int option = getValidIntegerInput();
+
 
             switch (option) {
                 case 1:
@@ -60,16 +60,16 @@ public class MyApplication {
 
     private void loginMenu() {
         System.out.print("Enter username: ");
-        String username = scanner.next();
+        String username = scanner.nextLine().trim();
         System.out.print("Enter password: ");
-        String password = scanner.next();
+        String password = scanner.nextLine().trim();
 
         String response = controller.loginUser(username, password);
         System.out.println(response);
 
         if (response.contains("Login successful")) {
             currentUser = controller.getLoggedInUser(username); // Fetch user details
-            mainMenu(); // Start user operations menu
+            mainMenu();
         }
     }
 
@@ -87,7 +87,7 @@ public class MyApplication {
             System.out.println("0. Logout");
 
             System.out.print("Select an option (0-6): ");
-            int option = scanner.nextInt();
+            int option = getValidIntegerInput();
 
             switch (option) {
                 case 1 -> getAllUsersMenu();
@@ -171,10 +171,10 @@ public class MyApplication {
     private void generateCardMenu() {
 
         System.out.println("Please enter the card brand (e.g., VISA, MASTERCARD): ");
-        String brand = scanner.next().trim().toUpperCase(); // Normalize input
+        String brand = scanner.next().trim().toUpperCase();
         System.out.println("Please enter the card issuer (e.g., Kaspi Gold, Forte Blue): ");
-        scanner.nextLine(); // Consume newline
-        String issuer = scanner.nextLine().trim(); // Normalize input
+        scanner.nextLine();
+        String issuer = scanner.nextLine().trim();
 
 
         Map<String, List<String>> brands = CardInformation.loadDataAsList("src/resources/brands.txt");
@@ -188,41 +188,32 @@ public class MyApplication {
         }
     }
 
-    private int getValidIntegerInput(String message) {
-        System.out.print(message + " ");
-
+    private int getValidIntegerInput() {
         while (true) {
             String input = scanner.nextLine().trim();
-
-            if (!input.isEmpty()) {
-                try {
-                    return Integer.parseInt(input);
-                } catch (NumberFormatException e) {
-                    System.out.print("Invalid input. Please enter a valid number: ");
-                }
-            } else {
-                System.out.print("");
+            try {
+                return Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.print("Invalid input. Please enter a number: ");
             }
         }
     }
 
 
+    private int getValidIntegerInput(String message) {
+        System.out.print(message);
+        return getValidIntegerInput();
+    }
 
 
     private double getValidDoubleInput(String message) {
-        System.out.print(message + " ");
-
+        System.out.print(message);
         while (true) {
             String input = scanner.nextLine().trim();
-
-            if (!input.isEmpty()) {
-                try {
-                    return Double.parseDouble(input);
-                } catch (NumberFormatException e) {
-                    System.out.print("Invalid input. Please enter a valid number: ");
-                }
-            } else {
-                System.out.print("");
+            try {
+                return Double.parseDouble(input);
+            } catch (NumberFormatException e) {
+                System.out.print("Invalid input. Please enter a valid number: ");
             }
         }
     }
