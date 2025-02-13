@@ -1,12 +1,19 @@
 package models;
 
+import java.util.UUID;
+
 public class Role {
-    private String id;  // Change from int to String
-    private String name; // "admin" or "user"
+    private String id;
+    private String name;
 
-    public Role() {}
+    // Constructor for name only (auto-generate id)
+    public Role(String name) {
+        this.id = UUID.randomUUID().toString(); // Generate unique id
+        this.name = name;
+    }
 
-    public Role(String id, String name) { // Use String id
+    // Constructor for both id and name
+    public Role(String id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -15,7 +22,7 @@ public class Role {
         return id;
     }
 
-    public void setId(String id) {  // Change setter type
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -29,9 +36,6 @@ public class Role {
 
     @Override
     public String toString() {
-        return "Role{" +
-                "id='" + id + '\'' + // Change int to String formatting
-                ", name='" + name + '\'' +
-                '}';
+        return String.format("Role{id='%s', name='%s'}", id, name);
     }
 }

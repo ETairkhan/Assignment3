@@ -1,9 +1,7 @@
 package repositories;
 
 import data.interfaceces.IDB;
-import models.User;
-import models.Role;
-import models.AuthUser;
+import models.*;
 import repositories.interfaces.IUserRepository;
 import validate.Validator;
 
@@ -62,7 +60,7 @@ public class UserRepository implements IUserRepository {
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
-                return new User(
+                return UserFactory.createUser(
                         rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("surname"),
@@ -167,26 +165,32 @@ public class UserRepository implements IUserRepository {
             return false;
         }
 
-        String senderBank = sender.getIssuer();
-        String receiverBank = receiver.getIssuer();
-        double fee = calculateTransactionFee(senderBank, receiverBank);
-        double totalAmount = amount + fee;
+        TransactionService transactionService = new TransactionService();
 
-        if (sender.getBalance() < totalAmount) {
-            System.out.println("Error: Insufficient balance.");
+        try {
+            double fee = transactionService.calculateTransactionFee(sender, receiver);
+            double totalAmount = amount + fee;
+
+            if (sender.getBalance() < totalAmount) {
+                System.out.println("Error: Insufficient balance.");
+                return false;
+            }
+
+            // Process the transaction
+            transactionService.processTransaction(sender, receiver, amount);
+
+            // Update the balances in the database
+            updateUserBalance(sender);
+            updateUserBalance(receiver);
+
+            System.out.printf("Transaction Successful! Sent: %.2f Dollars, Fee: %.2f Dollars, Total Deducted: %.2f Dollars%n",
+                    amount, fee, totalAmount);
+
+            return true;
+        } catch (IllegalArgumentException ex) {
+            System.err.println("Transaction failed: " + ex.getMessage());
             return false;
         }
-
-        sender.setBalance(sender.getBalance() - totalAmount);
-        updateUserBalance(sender);
-
-        receiver.setBalance(receiver.getBalance() + amount);
-        updateUserBalance(receiver);
-
-        System.out.printf("Transaction Successful! Sent: %.2f Dollars, Fee: %.2f Dollars, Total Deducted: %.2f Dollars%n",
-                amount, fee, totalAmount);
-
-        return true;
     }
 
     private double calculateTransactionFee(String senderBank, String receiverBank) {
@@ -221,8 +225,14 @@ public class UserRepository implements IUserRepository {
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
-                Role role = new Role(rs.getString("role_id"), rs.getString("role_id")); // Use role_id directly
-                return new AuthUser(rs.getInt("id"), rs.getString("username"), rs.getString("password"), role);
+                Role role = new Role(rs.getString("role_id"), rs.getString("role_id")); // Use Role constructor
+                return UserFactory.createAuthUser(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        role,
+                        "", "", false, "", 0.0, "", ""  // Default values since no `User` fields are available here
+                );
             }
         } catch (SQLException e) {
             System.err.println("Error authenticating user: " + e.getMessage());
@@ -255,8 +265,14 @@ public class UserRepository implements IUserRepository {
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
-                Role role = new Role(rs.getString("role_id"), rs.getString("role_id")); // Use role_id directly
-                return new AuthUser(rs.getInt("id"), rs.getString("username"), rs.getString("password"), role);
+                Role role = new Role(rs.getString("role_id"), rs.getString("role_id")); // Use Role constructor
+                return UserFactory.createAuthUser(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        role,
+                        "", "", false, "", 0.0, "", ""  // Default values for User fields
+                );
             }
         } catch (SQLException e) {
             System.err.println("Error fetching logged-in user: " + e.getMessage());
